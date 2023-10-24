@@ -1,8 +1,8 @@
 #include "Usuario.h"
+#include <string.h>
+Usuario::Usuario(){
+    strcpy(this->nome, "");
+    strcpy(this->senha, "");
+}
 
-class Usuario {
-    public:
-        int id;
-        char nome[tamanhoNome];
-        char senha[tamanhoSenha];
-};
+
