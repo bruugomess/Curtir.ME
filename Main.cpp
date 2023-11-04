@@ -5,29 +5,31 @@
 #include <stdio.h>
 
 #include "Usuario.h"
+#include "manipuladorDeUsuario.h"
 
 #define sucesso 0
 
-Usuario usuarioAtual;
-using namespace std;
+manipuladorDeUsuario manipuladorUsuarios;
 
 /*Declaração das Funções*/
-bool autenticarUsuario(char nome[], char senha[]);
+
 void printaMenuLogin();
 void printaMenu();
 void limpaEntrada();
-void cadastrarUsuario(char nome[], char senha[]);
+
 /*Declaração das Funções*/
 
 int main() {
     setlocale(LC_ALL, "Portuguese");
 
+    manipuladorUsuarios.criaArquivosNescessarios();
+    system("pause");
     int opcao;
+
     do {
 
         /*Se não existe um usuario*/
-        if(!strcmp(usuarioAtual.getSenha(), "") != 0){
-            //printf("Usuario Atual: %s", usuarioAtual.nome);
+        if(!usuarioAtual.existe()){
             printaMenuLogin();
 
             cin >> opcao;
@@ -40,7 +42,8 @@ int main() {
 
                 cout << "   Digite a senha do usuário: ";
                 fgets(senha, tamanhoSenha, stdin);
-                cadastrarUsuario(nome, senha);
+
+                manipuladorUsuarios.cadastrarUsuario(nome,senha);
                 break;
             case 2:
                 cout << "   Nome: ";
@@ -49,7 +52,7 @@ int main() {
                 cout << "   Senha: ";
                 fgets(senha, tamanhoSenha, stdin);
 
-                if (autenticarUsuario(nome,senha)) {
+                if (manipuladorUsuarios.autenticarUsuario(nome,senha)) {
                     cout << "   Autenticação bem-sucedida.\n";
                 }else{
                     cout << "   Usuario ou senha incorretos.\n";
@@ -74,6 +77,7 @@ int main() {
                     usuarioAtual.limpaUsuario();
                     break;
             }
+
         }
     } while (1);
 
@@ -116,48 +120,4 @@ void printaMenu(){
 void limpaEntrada(){
     char lixo[2];
     gets(lixo);
-}
-
-bool autenticarUsuario(char nome[], char senha[]) {
-
-    ifstream arquivo("Arquivos/usuarios.bin", ios::binary);
-    Usuario usuario;
-
-    if (!arquivo.is_open()) {
-        cout << "Erro ao abrir o arquivo de usuários." << endl;
-        return false;
-    }else{
-
-        while (arquivo.read((char*)&usuario, sizeof(Usuario))) {
-
-            if (strcmp(usuario.getNome(),nome) == 0 && strcmp(usuario.getSenha(),senha) == 0) {
-                usuarioAtual = usuario;
-                arquivo.close();
-                return true;
-            }
-        }
-    }
-
-    arquivo.close();
-
-    return false;
-}
-
-void cadastrarUsuario(char nome[], char senha[]) {
-    ofstream arquivo("Arquivos/usuarios.bin", ios::binary | ios::app);
-
-    if (!arquivo.is_open()) {
-        cout << "Erro ao abrir o arquivo de usuários." << endl;
-        return;
-    }
-
-    Usuario usuario;
-
-    usuario.setNome(nome); //Define o nome para o usuario
-    usuario.setSenha(senha);
-
-    arquivo.write((char*)&usuario, sizeof(Usuario));
-    arquivo.close();
-
-    cout << "Usuário cadastrado com sucesso." << endl;
 }

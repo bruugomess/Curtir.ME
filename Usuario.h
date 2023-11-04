@@ -15,6 +15,8 @@ public:
     void setSenha(char senha[]);
     void setId(int novoId);
     void limpaUsuario();
+    bool existe();
+
     Usuario();
 private:
     int id;
@@ -55,6 +57,12 @@ Usuario::Usuario(){
     strcpy(this->nome, "");
     strcpy(this->senha, "");
 }
+
+bool Usuario::existe()
+{
+    return strcmp(this->getNome(), "") == 0 || strcmp(this->getSenha(), "") == 0 ?  false : true;
+}
+
 void Usuario::limpaUsuario()
 {
     this->id = 0;
