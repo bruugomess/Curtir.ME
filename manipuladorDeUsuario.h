@@ -1,17 +1,21 @@
 #ifndef MANIPULADORDEUSUARIO_H
 #define MANIPULADORDEUSUARIO_H
 
+#include "Arquivo.h"
+#include <string>     // std::string, std::to_string
+
 using namespace std;
 Usuario usuarioAtual;
 
 class manipuladorDeUsuario {
 public:
+    Usuario procuraUsuarioId(int id);
+    Usuario procuraUsuarioNome(char nome[]);
     void cadastrarUsuario(char nome[], char senha[]);
     bool autenticarUsuario(char nome[], char senha[]);
     int numeroDeUsuarios();
     int aumentarNumeroDeUsuarios();
     void criaArquivosNescessarios();
-    int limparArquivoBinario(char nome[]);
 private:
 
 };
@@ -43,17 +47,6 @@ void manipuladorDeUsuario::criaArquivosNescessarios(){
         cout << "Arquivo de usuario criado\n";
         arquivo.close();
     }
-    //Arquivo de Postagens
-    ifstream ifs3("Arquivos/postagens.bin");
-    if (!ifs3) { //Verifica se Existe o Arquivo
-        ofstream arquivo("Arquivos/postagens.bin", ios::binary | ios::app);
-        if (!arquivo.is_open()) {
-            cout << "Erro ao criar o arquivo de postagens." << endl;
-            return;
-        }
-        cout << "Arquivo de Postagens criado\n";
-        arquivo.close();
-    }
 }
 
 
@@ -71,10 +64,31 @@ void manipuladorDeUsuario::cadastrarUsuario(char nome[], char senha[]) {
 
     usuario.setNome(nome); //Define o nome para o usuario
     usuario.setSenha(senha);
-    usuario.setId(this->numeroDeUsuarios());
+    usuario.setId(this->numeroDeUsuarios()+1);
 
     arquivo.write((char*)&usuario, sizeof(Usuario));
     arquivo.close();
+
+    //Cria arquivo de seguidores para o novo usuario
+    char parte1[] = "Arquivos/Seguidores/S#";
+    char parte2[] = ".bin";
+    char *nomeArquivo = strcat(strcat(parte1,to_string(usuario.getId()).c_str()),parte2);
+
+    ifstream ifs(nomeArquivo);
+    if (!ifs) { //Verifica se Existe o Arquivo
+        ofstream arquivo(nomeArquivo, ios::binary | ios::app);
+        if (!arquivo.is_open()) {
+            cout << "Erro ao criar o arquivo de numero de usuários." << endl;
+            return;
+        }
+        int numeroInicial = 0;
+        arquivo.write((char*)&numeroInicial, sizeof(int));
+        arquivo.write((char*)&numeroInicial, sizeof(int));
+
+        cout << "Arquivo de seguidores criado.\n";
+        arquivo.close();
+    }
+
 
     cout << "Usuário cadastrado com sucesso." << endl;
     this->aumentarNumeroDeUsuarios();
@@ -105,6 +119,7 @@ bool manipuladorDeUsuario::autenticarUsuario(char nome[], char senha[]) {
     return false;
 }
 
+
 int manipuladorDeUsuario::numeroDeUsuarios(){
     ifstream arquivo("Arquivos/numeroDeUsuariosCadastrados.bin", ios::binary);
     int numero;
@@ -120,7 +135,7 @@ int manipuladorDeUsuario::numeroDeUsuarios(){
 
 int manipuladorDeUsuario::aumentarNumeroDeUsuarios(){
     int numero = numeroDeUsuarios()+1;
-    this->limparArquivoBinario("Arquivos/numeroDeUsuariosCadastrados.bin");
+    limparArquivoBinario("Arquivos/numeroDeUsuariosCadastrados.bin");
     //Aumenta numero de usuarios cadastrados
     ofstream arquivo("Arquivos/numeroDeUsuariosCadastrados.bin", ios::binary | ios::app);
 
@@ -135,15 +150,62 @@ int manipuladorDeUsuario::aumentarNumeroDeUsuarios(){
     return 0;
 }
 
-int manipuladorDeUsuario::limparArquivoBinario(char nome[]){
-        ofstream arquivo(nome,std::ofstream::out | std::ofstream::trunc);
-        if (!arquivo.is_open()) {
-            cout << "Erro ao limpar o arquivo!" << endl;
-            return 1;
+
+Usuario manipuladorDeUsuario::procuraUsuarioId(int id) {
+
+    ifstream arquivo("Arquivos/usuarios.bin", ios::binary);
+    Usuario usuario;
+
+    if (!arquivo.is_open()) {
+        cout << "Erro ao abrir o arquivo de usuários." << endl;
+    }else{
+
+        while (arquivo.read((char*)&usuario, sizeof(Usuario))) {
+
+            if (usuario.getId() == id) {
+                arquivo.close();
+
+                return usuario;
+            }
         }
-        cout << "Arquivo Limpo com Sucesso!" << endl;
-        arquivo.close();
-        return 0;
+    }
+
+    arquivo.close();
+
+
+    usuario.setNome("");
+    usuario.setSenha("");
+    usuario.setId(0);
+
+    return usuario;
+}
+
+Usuario manipuladorDeUsuario::procuraUsuarioNome(char nome[]){
+    ifstream arquivo("Arquivos/usuarios.bin", ios::binary);
+    Usuario usuario;
+
+    if (!arquivo.is_open()) {
+        cout << "Erro ao abrir o arquivo de usuários." << endl;
+    }else{
+
+        while (arquivo.read((char*)&usuario, sizeof(Usuario))) {
+
+            if (strcmp(usuario.getNome(),nome) == 0) {
+                arquivo.close();
+
+                return usuario;
+            }
+        }
+    }
+
+
+    arquivo.close();
+
+    usuario.setNome("");
+    usuario.setSenha("");
+    usuario.setId(0);
+
+    return usuario;
 }
 
 
