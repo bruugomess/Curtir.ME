@@ -5,29 +5,36 @@
 #include <stdio.h>
 
 #include "Usuario.h"
+#include "Postagem.h"
 #include "manipuladorDeUsuario.h"
+#include "manipuladorDePostagem.h"
 
 #define sucesso 0
 
 manipuladorDeUsuario manipuladorUsuarios;
-
+manipuladorDePostagem manipuladorPostagens;
 /*Declaração das Funções*/
 
 void printaMenuLogin();
 void printaMenu();
 void limpaEntrada();
+void printaMenuPostagens();
+void printaMenuFeed();
 
 /*Declaração das Funções*/
 
 int main() {
+
     setlocale(LC_ALL, "Portuguese");
 
     manipuladorUsuarios.criaArquivosNescessarios();
+    manipuladorPostagens.criaArquivosNescessarios();
+    cout << "Numero de usuarios: " << manipuladorUsuarios.numeroDeUsuarios() << endl;
+    cout << "Numero de postagens: " << manipuladorPostagens.numeroDePostagens() << endl;
     system("pause");
     int opcao;
 
     do {
-
         /*Se não existe um usuario*/
         if(!usuarioAtual.existe()){
             printaMenuLogin();
@@ -35,7 +42,8 @@ int main() {
             cin >> opcao;
             char nome[tamanhoNome], senha[tamanhoSenha];
             switch (opcao) {
-            case 1:
+            case 1: //Cadastrar Usuario
+
                 cout << "   Digite o nome do usuário: ";
                 limpaEntrada();
                 fgets(nome, tamanhoNome, stdin);
@@ -43,9 +51,15 @@ int main() {
                 cout << "   Digite a senha do usuário: ";
                 fgets(senha, tamanhoSenha, stdin);
 
-                manipuladorUsuarios.cadastrarUsuario(nome,senha);
+                if(manipuladorUsuarios.procuraUsuarioNome(nome).existe() == true){
+                    cout << "\n\nEste nome de usuário já existe no sistema, tente outro nome!\n\n\n\n";
+                    system("pause");
+                }else{
+
+                    manipuladorUsuarios.cadastrarUsuario(nome,senha);
+                }
                 break;
-            case 2:
+            case 2: //Entrar com usuario e senha
                 cout << "   Nome: ";
                 limpaEntrada();
                 fgets(nome, tamanhoNome,stdin);
@@ -69,20 +83,77 @@ int main() {
             switch(opcao){
                 case 3:
                     break;
-                case 2:
+                case 2: // Adiciona uma postagem
+                    goto postagemStop;
                     break;
-                case 1:
+                case 1: // Exibe o feed
+                    int opcaoFeed;
+                    manipuladorPostagens.mostrarFeed();
+                    printaMenuFeed();
+
                     break;
                 case 0:
                     usuarioAtual.limpaUsuario();
                     break;
             }
 
+
+            postagemStop:
+                if(opcao == 2){
+                    while(1){
+                        printaMenuPostagens();
+                        int opcaoPostagens;
+                        cin >> opcaoPostagens;
+                        limpaEntrada();
+
+                        if(opcaoPostagens == 1){ //Adicionar Postagens
+                                char texto[tamanhoTextoPostagens];
+                                cout << "Digite o conteudo da postagem:\n";
+                                fgets(texto, tamanhoTextoPostagens, stdin);
+                                Postagem novaPostagem(usuarioAtual.getId(), 0,texto);
+                                manipuladorPostagens.adicionaAoArquivo(novaPostagem);
+                                system("pause");
+                        }else if(opcaoPostagens == 2){ // Alterar uma postagem
+                                while(1){
+                                    int numeroPostagem;
+                                    cout << "Qual postagem deseja alterar (0 para voltar) : \n";
+                                    cin >> numeroPostagem;
+
+                                    limpaEntrada();
+
+                                    if(numeroPostagem == 0){
+                                        goto postagemStop;
+                                    }
+
+                                    if( manipuladorPostagens.ehMinhaPostagem(usuarioAtual.getId(),numeroPostagem)){
+
+                                        char texto[tamanhoTextoPostagens];
+                                        cout << "Digite o conteudo da postagem:\n";
+                                        fgets(texto, tamanhoTextoPostagens, stdin);
+                                        Postagem postAlterado(usuarioAtual.getId(), numeroPostagem, texto);
+                                        manipuladorPostagens.salvaPostagem(postAlterado);
+                                        break;
+                                    }else{
+                                        cout << "Você não têm esta postagem.\n\n";
+                                        system("pause");
+
+                                    }
+                                }
+
+                        }else if(opcaoPostagens == 0){
+                            break;
+                        }else{
+                            cout << "Digite uma opção válida.\n";
+                        }
+                    }
+                }
+
         }
     } while (1);
 
     return 0;
 }
+
 
 
 void printaMenuLogin(){
@@ -95,7 +166,7 @@ void printaMenuLogin(){
 
         cout <<"    1 - Cadastrar usuário\n";
         cout <<"    2 - Entrar\n";
-        cout <<"    0 - Sair\n";
+        cout <<"    0 - Fechar\n";
         cout <<"    Digite a opção: ";
 }
 
@@ -108,7 +179,7 @@ void printaMenu(){
         cout <<"    .....................................................................\n";
 
 
-        printf("\n\n    Perfil: %s\n", usuarioAtual.getNome());
+        printf("\n\n    ID: %d Perfil: %s\n",usuarioAtual.getId(),usuarioAtual.getNome());
 
         cout <<"    1 - Feed\n";
         cout <<"    2 - Postagens\n";
@@ -117,7 +188,58 @@ void printaMenu(){
         cout <<"    Digite a opção: ";
 }
 
+void printaMenuPostagens(){
+        system("cls");
+        cout <<"    .....................................................................\n";
+        cout <<"    .                                                                   .\n";
+        cout <<"    .                            Postagens                              .\n";
+        cout <<"    .                                                                   .\n";
+        cout <<"    .....................................................................\n";
+
+
+        printf("\n\n    ID: %d Perfil: %s\n",usuarioAtual.getId(),usuarioAtual.getNome());
+
+        cout <<"    1 - Adicionar uma Postagem\n";
+        cout <<"    2 - Mudar postagem\n";
+        cout <<"    0 - Voltar\n";
+        cout <<"    Digite a opção: ";
+}
+
+void printaMenuFeed(){
+        int opcao;
+        int idPostagem;
+
+
+        while(1){
+            printf("\n\n    ID: %d Perfil: %s\n",usuarioAtual.getId(),usuarioAtual.getNome());
+
+            cout <<"    1 - Curtir uma Postagem\n";
+            cout <<"    2 - Comentar uma postagem\n";
+            cout <<"    2 - Detalhar uma postagem\n";
+            cout <<"    0 - Voltar\n";
+            cout <<"    Digite a opção: ";
+            cin >> opcao;
+            switch(opcao){
+                case 1: //Adiciona uma curtida a uma postagem escolhida
+                    cout << "   Digite o Id da postagem: ";
+                    cin >> idPostagem;
+                    if(manipuladorPostagens.buscaPostagem(idPostagem).existe()){
+                        manipuladorPostagens.adicionaCurtida(manipuladorPostagens.buscaPostagem(idPostagem));
+                    }else{
+                        cout << "\n\n  Esta postagem não existe!\n";
+                    }
+
+                    break;
+                case 2: // Adiciona um comentário a uma postagem escolhida
+                    break;
+                case 3: // Mostra uma postagem com seus comentários
+                    break;
+                case 0:
+                    return;
+            }
+        }
+}
+
 void limpaEntrada(){
-    char lixo[2];
-    gets(lixo);
+    getchar();
 }
