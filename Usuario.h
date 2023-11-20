@@ -56,6 +56,7 @@ void Usuario::setId(int novoId){
 Usuario::Usuario(){
     strcpy(this->nome, "");
     strcpy(this->senha, "");
+    this->setId(0);
 }
 
 bool Usuario::existe()
