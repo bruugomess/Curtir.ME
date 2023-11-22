@@ -4,8 +4,8 @@
 #include <fstream>
 using namespace std;
 
-void geraExcecao(char excecao[]){
-    cout << excecao << endl;
+void geraExcecao(char problema[]){
+    cout << problema << endl;
 }
 
 bool limparArquivoBinario(char nome[]){

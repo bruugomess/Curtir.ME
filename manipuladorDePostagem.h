@@ -4,6 +4,7 @@
 #include "Postagem.h"
 #include "Arquivo.h"
 #include "manipuladorDeUsuario.h"
+#include "manipuladorDeComentario.h"
 
 class manipuladorDePostagem
 {
@@ -17,6 +18,7 @@ class manipuladorDePostagem
         bool salvaPostagem(Postagem post);
         Postagem buscaPostagem(int id);
         bool adicionaCurtida(Postagem post);
+        void detalhar(int id);
 
     private:
 };
@@ -55,6 +57,8 @@ void manipuladorDePostagem::criaArquivosNescessarios(){
 void manipuladorDePostagem::mostrarFeed(){
 
     manipuladorDeUsuario mUsuario;
+    manipuladorDeComentario mComentario;
+
     ifstream arquivo("Arquivos/postagens.bin", ios::binary);
     Postagem post;
     if (!arquivo.is_open()) {
@@ -62,7 +66,6 @@ void manipuladorDePostagem::mostrarFeed(){
     }else{
 
         while (arquivo.read((char*)&post, sizeof(Postagem))) {
-            cout << "\n         ...............................................................................................................\n";
 
             cout << "\n       Id da postagem: " << post.GetnumeroPostagem();
             cout << "  ||  Postado por: "<< mUsuario.procuraUsuarioId(post.GetIDusuario()).getNome() << endl;
@@ -75,14 +78,55 @@ void manipuladorDePostagem::mostrarFeed(){
                 cout <<"Curtidas"<< endl;
 
             }
+            cout << "\n         ...............................................................................................................\n";
 
-            cout << "\n         ...............................................................................................................\n\n";
+            cout << "\n\n           Comentários: " << endl;
+            mComentario.exibirComentariosPorId(post.GetnumeroPostagem(), 2);
+
+            cout << "\n         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n\n";
 
         }
     }
 
 }
 
+void manipuladorDePostagem::detalhar(int id){
+
+    manipuladorDeUsuario mUsuario;
+    manipuladorDeComentario mComentario;
+
+    ifstream arquivo("Arquivos/postagens.bin", ios::binary);
+    Postagem post;
+    if (!arquivo.is_open()) {
+        geraExcecao("Erro ao abrir o arquivo de postagens.");
+    }else{
+
+        while (arquivo.read((char*)&post, sizeof(Postagem))) {
+            if(post.GetnumeroPostagem() == id){
+                cout << "\n         ...............................................................................................................\n";
+
+                cout << "\n       Id da postagem: " << post.GetnumeroPostagem();
+                cout << "  ||  Postado por: "<< mUsuario.procuraUsuarioId(post.GetIDusuario()).getNome() << endl;
+                cout << "       " << post.Getconteudo()<< endl;
+                cout << "       " << post.Getcurtidas() << "    ";
+
+                if(post.Getcurtidas() == 1){
+                    cout <<"Curtida"<< endl;
+                }else{
+                    cout <<"Curtidas"<< endl;
+
+                }
+                cout << "\n\n           Comentários: " << endl;
+                mComentario.exibirComentariosPorId(post.GetnumeroPostagem(), mostrarTodos);
+
+                cout << "\n         ...............................................................................................................\n\n";
+            }
+
+
+        }
+    }
+
+}
 bool manipuladorDePostagem::adicionaAoArquivo(Postagem post){
     ofstream arquivo("Arquivos/postagens.bin", ios::binary | ios::app);
 
