@@ -6,13 +6,17 @@
 
 #include "Usuario.h"
 #include "Postagem.h"
+#include "Comentario.h"
+
 #include "manipuladorDeUsuario.h"
 #include "manipuladorDePostagem.h"
-
+#include "manipuladorDeComentario.h"
 #define sucesso 0
 
 manipuladorDeUsuario manipuladorUsuarios;
 manipuladorDePostagem manipuladorPostagens;
+manipuladorDeComentario manipuladorComentarios;
+
 /*Declaração das Funções*/
 
 void printaMenuLogin();
@@ -29,6 +33,12 @@ int main() {
 
     manipuladorUsuarios.criaArquivosNescessarios();
     manipuladorPostagens.criaArquivosNescessarios();
+    manipuladorComentarios.criaArquivosNescessarios();
+
+
+    //manipuladorComentarios.exibirComentariosPorId(1, mostrarTodos);
+
+
     cout << "Numero de usuarios: " << manipuladorUsuarios.numeroDeUsuarios() << endl;
     cout << "Numero de postagens: " << manipuladorPostagens.numeroDePostagens() << endl;
     system("pause");
@@ -140,6 +150,8 @@ int main() {
                                     }
                                 }
 
+                        }else if(opcaoPostagens == 3){ // Seguir ou não seguir outro usuário
+                            break;
                         }else if(opcaoPostagens == 0){
                             break;
                         }else{
@@ -208,17 +220,20 @@ void printaMenuPostagens(){
 void printaMenuFeed(){
         int opcao;
         int idPostagem;
-
+        char textoComentario[tamanhoTextoComentarios];
+        int IDpostagem;
+        Comentario comentario;
 
         while(1){
             printf("\n\n    ID: %d Perfil: %s\n",usuarioAtual.getId(),usuarioAtual.getNome());
 
             cout <<"    1 - Curtir uma Postagem\n";
             cout <<"    2 - Comentar uma postagem\n";
-            cout <<"    2 - Detalhar uma postagem\n";
+            cout <<"    3 - Detalhar uma postagem (Mostrar postagem e todos os seus comentários)\n";
             cout <<"    0 - Voltar\n";
             cout <<"    Digite a opção: ";
             cin >> opcao;
+
             switch(opcao){
                 case 1: //Adiciona uma curtida a uma postagem escolhida
                     cout << "   Digite o Id da postagem: ";
@@ -231,11 +246,29 @@ void printaMenuFeed(){
 
                     break;
                 case 2: // Adiciona um comentário a uma postagem escolhida
+                        cout << "Qual o Id da postagem que você deseja comentar: ";
+                        scanf("%d", &IDpostagem);
+                        limpaEntrada();
+                        cout << "Digite o comentário: " << endl;
+                        fgets(textoComentario, tamanhoTextoComentarios, stdin);
+
+                        comentario.SetIDusuario(usuarioAtual.getId());
+                        comentario.Setconteudo(textoComentario);
+                        comentario.SetIDpostagem(IDpostagem);
+                        comentario.SetnomeUsuario(usuarioAtual.getNome());
+                        comentario.SetnumeroComentario(0);
+
+                        manipuladorComentarios.adicionaAoArquivo(comentario);
                     break;
                 case 3: // Mostra uma postagem com seus comentários
+                        cout << "Qual o Id da postagem que você deseja detalhar: ";
+                        scanf("%d", &IDpostagem);
+                        limpaEntrada();
+                        manipuladorPostagens.detalhar(IDpostagem);
                     break;
                 case 0:
                     return;
+
             }
         }
 }
