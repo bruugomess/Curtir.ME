@@ -18,6 +18,9 @@ public:
     bool existe();
 
     Usuario();
+
+    int numeroSeguidores = 0;
+    int numeroSeguindo = 0;
 private:
     int id;
     char nome[tamanhoNome];

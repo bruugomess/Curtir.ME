@@ -14,7 +14,7 @@ bool limparArquivoBinario(char nome[]){
             cout << "Erro ao limpar o arquivo!" << endl;
             return false;
         }
-        cout << "Arquivo Limpo com Sucesso!" << endl;
+        //cout << "Arquivo Limpo com Sucesso!" << endl;
         arquivo.close();
         return true;
 }
@@ -31,7 +31,7 @@ bool copiarArquivo(char destino[], char origem[]){
     while (arquivoOrigem.read((char*)&c, sizeof(char))) {
             arquivoDestino.write((char*)&c, sizeof(char));
     }
-    cout << "Arquivo copiado com sucesso." << endl;
+    //cout << "Arquivo copiado com sucesso." << endl;
 
     arquivoDestino.close();
     arquivoOrigem.close();
