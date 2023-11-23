@@ -194,7 +194,7 @@ bool manipuladorDePostagem::salvaPostagem(Postagem post){
     Postagem postAux;
     int i = 0;
     if (!arquivo.is_open()) {
-        geraExcecao("Erro ao abrir o arquivo de usuários.");
+        geraExcecao("Erro ao abrir o arquivo de postagens.");
         return false;
     }else{
 

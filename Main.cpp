@@ -35,13 +35,10 @@ int main() {
     manipuladorPostagens.criaArquivosNescessarios();
     manipuladorComentarios.criaArquivosNescessarios();
 
-
-    //manipuladorComentarios.exibirComentariosPorId(1, mostrarTodos);
-
-
     cout << "Numero de usuarios: " << manipuladorUsuarios.numeroDeUsuarios() << endl;
     cout << "Numero de postagens: " << manipuladorPostagens.numeroDePostagens() << endl;
     system("pause");
+
     int opcao;
 
     do {
@@ -80,8 +77,8 @@ int main() {
                     cout << "   Autenticação bem-sucedida.\n";
                 }else{
                     cout << "   Usuario ou senha incorretos.\n";
-                    system("pause");
                 }
+                system("pause");
                 break;
             case 0:
                 return sucesso;
@@ -91,7 +88,119 @@ int main() {
             cin >> opcao;
 
             switch(opcao){
-                case 3:
+                case 3:// Seguir ou não seguir outro usuário
+                        int opcaoSeguir;
+                        cout << "   (1)Seguir (2) Deixar de seguir: ";
+                        cin >> opcaoSeguir;
+                        limpaEntrada();
+
+                        if(opcaoSeguir == 1){ //Seguir
+
+                            cout << "    (1) Seguir por id (2) Seguir por nome: ";
+                            cin >> opcaoSeguir;
+                            limpaEntrada();
+
+                            if(opcaoSeguir == 1){ //Seguir por Id
+                                int id;
+                                cout << "       Digite o Id que dejesa seguir: ";
+                                cin >> id;
+                                limpaEntrada();
+                                if(id == usuarioAtual.getId()){ //Se for você mesmo
+
+                                    cout << "Você não pode seguir a si mesmo" << endl;
+
+                                }else if(manipuladorUsuarios.seguir(usuarioAtual.getId(), id)){
+                                    Usuario seguido = manipuladorUsuarios.procuraUsuarioId(id);
+
+                                    seguido.numeroSeguidores++;
+                                    usuarioAtual.numeroSeguindo++;
+
+                                    manipuladorUsuarios.salvarUsuario(seguido);
+                                    manipuladorUsuarios.salvarUsuario(usuarioAtual);
+
+                                    cout << "Seguido com sucesso \n";
+                                }else{
+                                    cout << "Falha ao seguir \n";
+                                }
+                            }else if(opcaoSeguir == 2){ //Seguir por nome
+                                char nomeDoSeguido[tamanhoNome];
+                                cout << "    Digite o nome de quem dejesa seguir: ";
+                                fgets(nomeDoSeguido, tamanhoNome, stdin);
+
+                                if (strcmp(nomeDoSeguido, usuarioAtual.getNome()) == 0){ //Se for você mesmo
+
+                                    cout << "Você não pode seguir a si mesmo" << endl;
+
+                                }else if(manipuladorUsuarios.seguir(usuarioAtual.getId(), nomeDoSeguido)){
+                                    Usuario seguido = manipuladorUsuarios.procuraUsuarioNome(nomeDoSeguido);
+
+                                    seguido.numeroSeguidores++;
+                                    usuarioAtual.numeroSeguindo++;
+
+                                    manipuladorUsuarios.salvarUsuario(seguido);
+                                    manipuladorUsuarios.salvarUsuario(usuarioAtual);
+
+                                    cout << "Seguido com sucesso \n";
+                                }else{
+                                    cout << "Falha ao seguir \n";
+                                }
+                            }else{
+                                cout << "Digite uma opção válida!\n";
+                            }
+
+                        }else if(opcaoSeguir == 2){ //Deixar de seguir
+
+
+                            cout << "    (1) Deixar de seguir por id (2) Deixar de seguir por nome: ";
+                                cin >> opcaoSeguir;
+                                limpaEntrada();
+
+                                if(opcaoSeguir == 1){ //Deixar de seguir por Id
+                                    int id;
+                                    cout << "       Digite o Id que dejesa deixar de seguir: ";
+                                    cin >> id;
+                                    limpaEntrada();
+                                    if(manipuladorUsuarios.deixarDeSeguir(usuarioAtual.getId(), id)){
+                                        Usuario seguido = manipuladorUsuarios.procuraUsuarioId(id);
+
+                                        seguido.numeroSeguidores--;
+                                        usuarioAtual.numeroSeguindo--;
+
+                                        manipuladorUsuarios.salvarUsuario(seguido);
+                                        manipuladorUsuarios.salvarUsuario(usuarioAtual);
+
+                                        cout << "Deixado de Seguir com sucesso \n";
+                                    }else{
+                                        cout << "Falha ao deixar de seguir \n";
+                                    }
+                                }else if(opcaoSeguir == 2){ //Deixar de seguir por nome
+                                    char nomeDoSeguido[tamanhoNome];
+                                    cout << "    Digite o nome de quem dejesa deixar de seguir: ";
+                                    fgets(nomeDoSeguido, tamanhoNome, stdin);
+                                    if(manipuladorUsuarios.deixarDeSeguir(usuarioAtual.getId(), nomeDoSeguido)){
+                                        Usuario seguido = manipuladorUsuarios.procuraUsuarioNome(nomeDoSeguido);
+
+                                        seguido.numeroSeguidores--;
+                                        usuarioAtual.numeroSeguindo--;
+
+                                        manipuladorUsuarios.salvarUsuario(seguido);
+                                        manipuladorUsuarios.salvarUsuario(usuarioAtual);
+
+                                        cout << "Deixado de Seguir com sucesso \n";
+                                    }else{
+                                        cout << "Falha ao seguir \n";
+                                    }
+                                }else{
+                                    cout << "Digite uma opção válida!\n";
+                                }
+
+                        }else{
+                            cout << "Digite uma opção válida!\n";
+
+                        }
+
+                        system("pause");
+
                     break;
                 case 2: // Adiciona uma postagem
                     goto postagemStop;
@@ -150,8 +259,6 @@ int main() {
                                     }
                                 }
 
-                        }else if(opcaoPostagens == 3){ // Seguir ou não seguir outro usuário
-                            break;
                         }else if(opcaoPostagens == 0){
                             break;
                         }else{
@@ -191,7 +298,8 @@ void printaMenu(){
         cout <<"    .....................................................................\n";
 
 
-        printf("\n\n    ID: %d Perfil: %s\n",usuarioAtual.getId(),usuarioAtual.getNome());
+        printf("\n\n    ID: %d Perfil: %s",usuarioAtual.getId(),usuarioAtual.getNome());
+        printf("    Seguidores: %d Seguindo: %d\n\n",usuarioAtual.numeroSeguidores,usuarioAtual.numeroSeguindo);
 
         cout <<"    1 - Feed\n";
         cout <<"    2 - Postagens\n";
