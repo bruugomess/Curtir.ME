@@ -13,41 +13,59 @@
 #include "manipuladorDePostagem.h"
 #include "manipuladorDeComentario.h"
 #define sucesso 0
+/*Criação dos manipuladores utilizados*/
 
 manipuladorDeUsuario manipuladorUsuarios;
 manipuladorDePostagem manipuladorPostagens;
 manipuladorDeComentario manipuladorComentarios;
 Hashtag manipuladorHashtag;
 
+/*Criação dos manipuladores utilizados*/
+
 /*Declaração das Funções*/
 
-void printaMenuLogin();
-void printaMenu();
-void limpaEntrada();
-void printaMenuPostagens();
-void printaMenuFeed();
-void printaMenuFeedPostagens();
+void printaMenuLogin(); // Mostra na tela o menu de login
+void printaMenu(); // Mostra na tela o menu normal
+void limpaEntrada(); // Limpa os buffers depois de uma leitura
+void printaMenuPostagens(); // Mostra o menu de Postagens, após o usuario escolher a parte de postagens
+void printaMenuFeed(); // Exibe o menu com opções de feed
+void printaMenuFeedPostagens(); // Mostra o menu de intereção com o feed, que é exibido após serem mostradas postagens
 
 /*Declaração das Funções*/
 
 int main() {
 
-    setlocale(LC_ALL, "Portuguese");
+    setlocale(LC_ALL, "Portuguese"); //Deixa a saída com os caracteres da lingua portuguesa
 
-    manipuladorUsuarios.criaArquivosNescessarios();
-    manipuladorPostagens.criaArquivosNescessarios();
-    manipuladorComentarios.criaArquivosNescessarios();
-    manipuladorHashtag.criaArquivosNescessarios();
+    /*Cria os arquivos nescessários no inicio se não existir*/
 
-    cout << "Numero de usuarios: " << manipuladorUsuarios.numeroDeUsuarios() << endl;
-    cout << "Numero de postagens: " << manipuladorPostagens.numeroDePostagens() << endl;
+    try{
+
+        manipuladorUsuarios.criaArquivosNescessarios();
+        manipuladorPostagens.criaArquivosNescessarios();
+        manipuladorComentarios.criaArquivosNescessarios();
+        manipuladorHashtag.criaArquivosNescessarios();
+
+    }catch(const char* msg){
+        cout << "ERRO: " << msg;
+        return 0;
+    }
+
+    /*Cria os arquivos nescessários no inicio se não existir*/
+
+    try{ // Mostra quantidade de usuarios
+        cout << "Numero de usuarios: " << manipuladorUsuarios.numeroDeUsuarios() << endl;
+        cout << "Numero de postagens: " << manipuladorPostagens.numeroDePostagens() << endl;
+    }catch(const char* msg){
+            cout << "ERRO: " << msg;
+    }
+
     system("pause");
 
     int opcao;
 
     do {
-        /*Se não existe um usuario*/
-        if(!usuarioAtual.existe()){
+        if(!usuarioAtual.existe()){  //Se não existe um usuario
             printaMenuLogin();
 
             cin >> opcao;
@@ -62,14 +80,21 @@ int main() {
                 cout << "   Digite a senha do usuário: ";
                 fgets(senha, tamanhoSenha, stdin);
 
-                if(manipuladorUsuarios.procuraUsuarioNome(nome).existe() == true){
-                    cout << "\n\nEste nome de usuário já existe no sistema, tente outro nome!\n\n\n\n";
-                    system("pause");
-                }else{
+                try{
+                    if(manipuladorUsuarios.procuraUsuarioNome(nome).existe() == true){
+                        cout << "\n\nEste nome de usuário já existe no sistema, tente outro nome!\n\n\n\n";
+                        system("pause");
+                    }else{
+                            manipuladorUsuarios.cadastrarUsuario(nome,senha);
 
-                    manipuladorUsuarios.cadastrarUsuario(nome,senha);
+                    }
+                }catch(const char* msg){
+                        cout << "ERRO: " << msg;
+                        cout << "Não foi possivel cadastrar o usuário!" << endl;
                 }
+
                 break;
+
             case 2: //Entrar com usuario e senha
                 cout << "   Nome: ";
                 limpaEntrada();
@@ -77,11 +102,19 @@ int main() {
                 cout << "   Senha: ";
                 fgets(senha, tamanhoSenha, stdin);
 
-                if (manipuladorUsuarios.autenticarUsuario(nome,senha)) {
-                    cout << "   Autenticação bem-sucedida.\n";
-                }else{
-                    cout << "   Usuario ou senha incorretos.\n";
+                try{
+
+                    if (manipuladorUsuarios.autenticarUsuario(nome,senha)) {
+                        cout << "   Autenticação bem-sucedida.\n";
+                    }else{
+                        cout << "   Usuario ou senha incorretos.\n";
+                    }
+
+                }catch(const char* msg){
+                    cout << "ERRO: " << msg;
+                    cout << "Não foi possivel entrar com o usuário!";
                 }
+
                 system("pause");
                 break;
             case 0:
@@ -93,6 +126,7 @@ int main() {
 
             switch(opcao){
                 case 3:// Seguir ou não seguir outro usuário
+
                         int opcaoSeguir;
                         cout << "   (1)Seguir (2) Deixar de seguir: ";
                         cin >> opcaoSeguir;
@@ -104,110 +138,124 @@ int main() {
                             cin >> opcaoSeguir;
                             limpaEntrada();
 
-                            if(opcaoSeguir == 1){ //Seguir por Id
-                                int id;
-                                cout << "       Digite o Id que dejesa seguir: ";
-                                cin >> id;
-                                limpaEntrada();
-                                if(id == usuarioAtual.getId()){ //Se for você mesmo
-
-                                    cout << "Você não pode seguir a si mesmo" << endl;
-
-                                }else if(manipuladorUsuarios.seguir(usuarioAtual.getId(), id)){
-                                    Usuario seguido = manipuladorUsuarios.procuraUsuarioId(id);
-
-                                    seguido.numeroSeguidores++;
-                                    usuarioAtual.numeroSeguindo++;
-
-                                    manipuladorUsuarios.salvarUsuario(seguido);
-                                    manipuladorUsuarios.salvarUsuario(usuarioAtual);
-
-                                    cout << "Seguido com sucesso \n";
-                                }else{
-                                    cout << "Falha ao seguir \n";
-                                }
-                            }else if(opcaoSeguir == 2){ //Seguir por nome
-                                char nomeDoSeguido[tamanhoNome];
-                                cout << "    Digite o nome de quem dejesa seguir: ";
-                                fgets(nomeDoSeguido, tamanhoNome, stdin);
-
-                                if (strcmp(nomeDoSeguido, usuarioAtual.getNome()) == 0){ //Se for você mesmo
-
-                                    cout << "Você não pode seguir a si mesmo" << endl;
-
-                                }else if(manipuladorUsuarios.seguir(usuarioAtual.getId(), nomeDoSeguido)){
-                                    Usuario seguido = manipuladorUsuarios.procuraUsuarioNome(nomeDoSeguido);
-
-                                    seguido.numeroSeguidores++;
-                                    usuarioAtual.numeroSeguindo++;
-
-                                    manipuladorUsuarios.salvarUsuario(seguido);
-                                    manipuladorUsuarios.salvarUsuario(usuarioAtual);
-
-                                    cout << "Seguido com sucesso \n";
-                                }else{
-                                    cout << "Falha ao seguir \n";
-                                }
-                            }else{
-                                cout << "Digite uma opção válida!\n";
-                            }
-
-                        }else if(opcaoSeguir == 2){ //Deixar de seguir
-
-
-                            cout << "    (1) Deixar de seguir por id (2) Deixar de seguir por nome: ";
-                                cin >> opcaoSeguir;
-                                limpaEntrada();
-
-                                if(opcaoSeguir == 1){ //Deixar de seguir por Id
+                            try{
+                                if(opcaoSeguir == 1){ //Seguir por Id
                                     int id;
-                                    cout << "       Digite o Id que dejesa deixar de seguir: ";
+                                    cout << "       Digite o Id que dejesa seguir: ";
                                     cin >> id;
                                     limpaEntrada();
-                                    if(manipuladorUsuarios.deixarDeSeguir(usuarioAtual.getId(), id)){
+                                    if(id == usuarioAtual.getId()){ //Se for você mesmo
+
+                                        cout << "Você não pode seguir a si mesmo" << endl;
+
+                                    }else if(manipuladorUsuarios.seguir(usuarioAtual.getId(), id)){
                                         Usuario seguido = manipuladorUsuarios.procuraUsuarioId(id);
 
-                                        seguido.numeroSeguidores--;
-                                        usuarioAtual.numeroSeguindo--;
+                                        seguido.numeroSeguidores++;
+                                        usuarioAtual.numeroSeguindo++;
 
                                         manipuladorUsuarios.salvarUsuario(seguido);
                                         manipuladorUsuarios.salvarUsuario(usuarioAtual);
 
-                                        cout << "Deixado de Seguir com sucesso \n";
+                                        cout << "Seguido com sucesso \n";
                                     }else{
-                                        cout << "Falha ao deixar de seguir \n";
+                                        cout << "Falha ao seguir \n";
                                     }
-                                }else if(opcaoSeguir == 2){ //Deixar de seguir por nome
+                                }else if(opcaoSeguir == 2){ //Seguir por nome
                                     char nomeDoSeguido[tamanhoNome];
-                                    cout << "    Digite o nome de quem dejesa deixar de seguir: ";
+                                    cout << "    Digite o nome de quem dejesa seguir: ";
                                     fgets(nomeDoSeguido, tamanhoNome, stdin);
-                                    if(manipuladorUsuarios.deixarDeSeguir(usuarioAtual.getId(), nomeDoSeguido)){
+
+                                    if (strcmp(nomeDoSeguido, usuarioAtual.getNome()) == 0){ //Se for você mesmo
+
+                                        cout << "Você não pode seguir a si mesmo" << endl;
+
+                                    }else if(manipuladorUsuarios.seguir(usuarioAtual.getId(), nomeDoSeguido)){
                                         Usuario seguido = manipuladorUsuarios.procuraUsuarioNome(nomeDoSeguido);
 
-                                        seguido.numeroSeguidores--;
-                                        usuarioAtual.numeroSeguindo--;
+                                        seguido.numeroSeguidores++;
+                                        usuarioAtual.numeroSeguindo++;
 
                                         manipuladorUsuarios.salvarUsuario(seguido);
                                         manipuladorUsuarios.salvarUsuario(usuarioAtual);
 
-                                        cout << "Deixado de Seguir com sucesso \n";
+                                        cout << "Seguido com sucesso \n";
                                     }else{
                                         cout << "Falha ao seguir \n";
                                     }
                                 }else{
                                     cout << "Digite uma opção válida!\n";
                                 }
+                            }catch(const char* msg){
+                                cout << "ERRO: " << msg;
+                            }
 
-                        }else{
-                            cout << "Digite uma opção válida!\n";
+                        }else if(opcaoSeguir == 2){ //Deixar de seguir
 
-                        }
+
+                                cout << "    (1) Deixar de seguir por id (2) Deixar de seguir por nome: ";
+                                    cin >> opcaoSeguir;
+                                    limpaEntrada();
+
+                                    if(opcaoSeguir == 1){ //Deixar de seguir por Id
+                                        int id;
+                                        cout << "       Digite o Id que dejesa deixar de seguir: ";
+                                        cin >> id;
+                                        limpaEntrada();
+                                        try{
+
+                                            manipuladorUsuarios.deixarDeSeguir(usuarioAtual.getId(), id);
+                                            Usuario seguido = manipuladorUsuarios.procuraUsuarioId(id);
+
+                                            seguido.numeroSeguidores--;
+                                            usuarioAtual.numeroSeguindo--;
+
+                                            manipuladorUsuarios.salvarUsuario(seguido);
+                                            manipuladorUsuarios.salvarUsuario(usuarioAtual);
+
+                                            cout << "Deixado de Seguir com sucesso \n";
+
+                                        }catch(const char* msg){
+                                            cout << "ERRO: " << msg;
+                                            cout << "Falha ao deixar de seguir \n";
+                                        }
+
+                                    }else if(opcaoSeguir == 2){ //Deixar de seguir por nome
+                                        char nomeDoSeguido[tamanhoNome];
+                                        cout << "    Digite o nome de quem dejesa deixar de seguir: ";
+                                        fgets(nomeDoSeguido, tamanhoNome, stdin);
+
+                                        try{
+                                            manipuladorUsuarios.deixarDeSeguir(usuarioAtual.getId(), nomeDoSeguido);
+                                            Usuario seguido = manipuladorUsuarios.procuraUsuarioNome(nomeDoSeguido);
+
+                                            seguido.numeroSeguidores--;
+                                            usuarioAtual.numeroSeguindo--;
+
+                                            manipuladorUsuarios.salvarUsuario(seguido);
+                                            manipuladorUsuarios.salvarUsuario(usuarioAtual);
+
+                                            cout << "Deixado de Seguir com sucesso \n";
+
+                                        }catch(const char* msg){
+                                                cout << "ERRO: " << msg;
+                                                cout << "Falha ao seguir \n";
+                                        }
+
+                                    }else{
+                                        cout << "Digite uma opção válida!\n";
+                                    }
+
+                            }else{
+                                cout << "Digite uma opção válida!\n";
+
+                            }
 
                         system("pause");
 
                     break;
                 case 2: // Adiciona uma postagem
-                    goto postagemStop;
+                    goto postagemStop; // Vai para a estação de postagens
                     break;
                 case 1: // Exibe o feed
                     printaMenuFeed();
@@ -250,10 +298,25 @@ int main() {
 
                                     novaPostagem.hashtag.Sethashtag(hashtag);
                                     novaPostagem.hashtag.Setexiste(true);
-                                    manipuladorHashtag.adicionaHashtagArquivo(novaPostagem.hashtag);
+                                    try{
+
+                                        manipuladorHashtag.adicionaHashtagArquivo(novaPostagem.hashtag);
+
+                                    }catch(const char* msg){
+                                        cout << "ERRO: " << msg;
+                                        break;
+                                    }
+
                                 }
 
-                                manipuladorPostagens.adicionaAoArquivo(novaPostagem); //Adiciona a nova postagem ao arquivo
+                                try{
+                                    manipuladorPostagens.adicionaAoArquivo(novaPostagem); //Adiciona a nova postagem ao arquivo
+                                }catch(const char* msg){
+                                    cout << "ERRO: " << msg;
+                                    cout << "Não foi possivel adicionar a postagem" << endl;
+                                    break;
+                                }
+
                                 system("pause");
                         }else if(opcaoPostagens == 2){ // Alterar uma postagem
                                 while(1){
@@ -267,19 +330,28 @@ int main() {
                                         goto postagemStop;
                                     }
 
-                                    if( manipuladorPostagens.ehMinhaPostagem(usuarioAtual.getId(),numeroPostagem)){
+                                    try{
+                                        if( manipuladorPostagens.ehMinhaPostagem(usuarioAtual.getId(),numeroPostagem)){
 
-                                        char texto[tamanhoTextoPostagens];
-                                        cout << "Digite o conteudo da postagem:\n";
-                                        fgets(texto, tamanhoTextoPostagens, stdin);
-                                        Postagem postAlterado(usuarioAtual.getId(), numeroPostagem, texto);
-                                        manipuladorPostagens.salvaPostagem(postAlterado);
-                                        break;
-                                    }else{
-                                        cout << "Você não têm esta postagem.\n\n";
-                                        system("pause");
+                                            char texto[tamanhoTextoPostagens];
+                                            cout << "Digite o conteudo da postagem:\n";
+                                            fgets(texto, tamanhoTextoPostagens, stdin);
+                                            Postagem postAlterado(usuarioAtual.getId(), numeroPostagem, texto);
 
+                                            manipuladorPostagens.salvaPostagem(postAlterado);
+
+
+                                            break;
+                                        }else{
+                                            cout << "Você não têm esta postagem.\n\n";
+                                            system("pause");
+
+                                        }
+                                    }catch(const char* msg){
+                                        cout << "ERRO: " << msg;
+                                        cout << "Não foi possivel alterar!" << endl;
                                     }
+
                                 }
 
                         }else if(opcaoPostagens == 0){
@@ -295,6 +367,7 @@ int main() {
 
     return 0;
 }
+
 
 
 
@@ -369,10 +442,18 @@ void printaMenuFeedPostagens(){
                 case 1: //Adiciona uma curtida a uma postagem escolhida
                     cout << "   Digite o Id da postagem: ";
                     cin >> idPostagem;
-                    if(manipuladorPostagens.buscaPostagem(idPostagem).existe()){
-                        manipuladorPostagens.adicionaCurtida(manipuladorPostagens.buscaPostagem(idPostagem));
-                    }else{
-                        cout << "\n\n  Esta postagem não existe!\n";
+
+                    try{
+
+                        if(manipuladorPostagens.buscaPostagem(idPostagem).existe()){
+                            manipuladorPostagens.adicionaCurtida(manipuladorPostagens.buscaPostagem(idPostagem));
+                        }else{
+                            cout << "\n\n  Esta postagem não existe!\n";
+                        }
+
+                    }catch(const char* msg){
+                        cout << "ERRO: " << msg;
+                        cout << "Não foi possivel curtir" << endl;
                     }
 
                     break;
@@ -389,13 +470,25 @@ void printaMenuFeedPostagens(){
                         comentario.SetnomeUsuario(usuarioAtual.getNome());
                         comentario.SetnumeroComentario(0);
 
-                        manipuladorComentarios.adicionaAoArquivo(comentario);
+                        try{
+                            manipuladorComentarios.adicionaAoArquivo(comentario);
+                        }catch(const char* msg){
+                            cout << "ERRO: " << msg;
+                            cout << "Não foi possivel adicionar o comentário" << endl;
+                        }
+
                     break;
                 case 3: // Mostra uma postagem com seus comentários
                         cout << "Qual o Id da postagem que você deseja detalhar: ";
                         scanf("%d", &IDpostagem);
                         limpaEntrada();
-                        manipuladorPostagens.detalhar(IDpostagem);
+
+                        try{
+                            manipuladorPostagens.detalhar(IDpostagem);
+                        }catch(const char* msg){
+                            cout << "ERRO: " << msg;
+                        }
+
                     break;
                 case 0:
                     return;
@@ -434,19 +527,40 @@ void printaMenuFeed(){
 
             switch(opcao){
                 case 1: //Mostra feed pelas pessoas que você segue
-                    manipuladorPostagens.mostrarFeedDosSeguidos(usuarioAtual.getId());
-                    printaMenuFeedPostagens();
+
+                    try{
+                        manipuladorPostagens.mostrarFeedDosSeguidos(usuarioAtual.getId());
+                        printaMenuFeedPostagens();
+                    }catch(const char* msg){
+                        cout << "ERRO: " << msg;
+                        cout << "Não é possivel mostrar o feed" << endl;
+                    }
+
                     break;
                 case 2: // Mostra o Feed total
-                    manipuladorPostagens.mostrarFeed();
-                    printaMenuFeedPostagens();
+
+                    try{
+                        manipuladorPostagens.mostrarFeed();
+                        printaMenuFeedPostagens();
+                    }catch(const char* msg){
+                        cout << "ERRO: " << msg;
+                        cout << "Não é possivel mostrar o feed" << endl;
+                    }
+
                     break;
                 case 3: // Mostra feed por hashtag
                     char hashtag[tamanhoHashtag];
                     cout << "Digite a hashtag procurada:";
                     fgets(hashtag, tamanhoHashtag, stdin);
-                    manipuladorPostagens.mostrarFeedPorHashtag(hashtag);
-                    printaMenuFeedPostagens();
+
+                    try{
+                        manipuladorPostagens.mostrarFeedPorHashtag(hashtag);
+                        printaMenuFeedPostagens();
+                    }catch(const char* msg){
+                        cout << "ERRO: " << msg;
+                        cout << "Não é possivel mostrar o feed por hashtag" << endl;
+                    }
+
                     break;
                 case 0:
                     return;

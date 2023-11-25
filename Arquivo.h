@@ -5,7 +5,8 @@
 using namespace std;
 
 void geraExcecao(char problema[]){
-    cout << problema << endl;
+    throw problema;
+    //cout << problema << endl;
 }
 
 bool limparArquivoBinario(char nome[]){
