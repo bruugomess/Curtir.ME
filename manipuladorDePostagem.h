@@ -27,7 +27,7 @@ class manipuladorDePostagem
 
 //Função que cria todos os documentos nescessarios para o funcionamento das postagens
 void manipuladorDePostagem::criaArquivosNescessarios(){
-    //Arquivo de numero de postagens cadastradas
+    //Arquivo de numero de postagens cadastrados
     ifstream ifs("Arquivos/numeroDePostagensCadastradas.bin");
     if (!ifs) { //Verifica se Existe o Arquivo
         ofstream arquivo("Arquivos/numeroDePostagensCadastradas.bin", ios::binary | ios::app);
@@ -311,7 +311,7 @@ Postagem manipuladorDePostagem::buscaPostagem(int id){
     Postagem vazio;
 
     if (!arquivo.is_open()) {
-        geraExcecao("Erro ao abrir o arquivo de postagens.");
+        geraExcecao("Erro ao abrir o arquivo de usuários.");
         return vazio;
     }else{
 

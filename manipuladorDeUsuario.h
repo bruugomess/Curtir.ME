@@ -41,7 +41,7 @@ void manipuladorDeUsuario::criaArquivosNescessarios(){
     if (!ifs) { //Verifica se Existe o Arquivo
         ofstream arquivo("Arquivos/numeroDeUsuariosCadastrados.bin", ios::binary | ios::app);
         if (!arquivo.is_open()) {
-            cout << "Erro ao criar o arquivo de numero de usuários." << endl;
+            geraExcecao("Erro ao criar o arquivo de numero de usuários.");
             return;
         }
         int numeroInicial = 0;
@@ -55,7 +55,7 @@ void manipuladorDeUsuario::criaArquivosNescessarios(){
     if (!ifs2) { //Verifica se Existe o Arquivo
         ofstream arquivo("Arquivos/usuarios.bin", ios::binary | ios::app);
         if (!arquivo.is_open()) {
-            cout << "Erro ao criar o arquivo de usuários." << endl;
+            geraExcecao("Erro ao criar o arquivo de usuários.");
             return;
         }
         cout << "Arquivo de usuario criado\n";
@@ -70,7 +70,7 @@ void manipuladorDeUsuario::cadastrarUsuario(char nome[], char senha[]) {
     ofstream arquivo("Arquivos/usuarios.bin", ios::binary | ios::app);
 
     if (!arquivo.is_open()) {
-        cout << "Erro ao abrir o arquivo de usuários." << endl;
+        geraExcecao("Erro ao abrir o arquivo de usuários.");
         return;
     }
 
@@ -93,7 +93,7 @@ void manipuladorDeUsuario::cadastrarUsuario(char nome[], char senha[]) {
     if (!ifs) { //Verifica se Existe o Arquivo
         ofstream arquivo(nomeArquivo, ios::binary | ios::app);
         if (!arquivo.is_open()) {
-            cout << "Erro ao criar o arquivo de numero de seguidores." << endl;
+            geraExcecao("Erro ao criar o arquivo de numero de seguidores.");
             return;
         }
 
@@ -109,9 +109,10 @@ void manipuladorDeUsuario::cadastrarUsuario(char nome[], char senha[]) {
     if (!ifs2) { //Verifica se Existe o Arquivo
         arquivo.open(nomeArquivo2, ios::binary | ios::app);
         if (!arquivo.is_open()) {
-            cout << "Erro ao criar o arquivo de numero de seguidos." << endl;
+            geraExcecao("Erro ao criar o arquivo de numero de seguidos.");
             return;
         }
+
         system("pause");
 
         cout << "Arquivo de seguidores criado.\n";
@@ -129,7 +130,7 @@ bool manipuladorDeUsuario::autenticarUsuario(char nome[], char senha[]) {
     Usuario usuario;
 
     if (!arquivo.is_open()) {
-        cout << "Erro ao abrir o arquivo de usuários." << endl;
+        geraExcecao("Erro ao abrir o arquivo de usuários.");
         return false;
     }else{
         while (arquivo.read((char*)&usuario, sizeof(Usuario))) {
@@ -151,7 +152,7 @@ int manipuladorDeUsuario::numeroDeUsuarios(){
     ifstream arquivo("Arquivos/numeroDeUsuariosCadastrados.bin", ios::binary);
     int numero;
     if (!arquivo.is_open()) {
-        cout << "Erro ao abrir o arquivo de numero de usuários." << endl;
+        geraExcecao("Erro ao abrir o arquivo de numero de usuários.");
         return 0;
     }else{
         arquivo.read((char*)&numero, sizeof(int));
@@ -167,7 +168,7 @@ int manipuladorDeUsuario::aumentarNumeroDeUsuarios(){
     ofstream arquivo("Arquivos/numeroDeUsuariosCadastrados.bin", ios::binary | ios::app);
 
     if (!arquivo.is_open()) {
-        cout << "Erro ao abrir o arquivo de numero de usuários." << endl;
+        geraExcecao("Erro ao abrir o arquivo de numero de usuários.");
         return 1;
     }
 
@@ -184,7 +185,7 @@ Usuario manipuladorDeUsuario::procuraUsuarioId(int id) {
     Usuario usuario;
 
     if (!arquivo.is_open()) {
-        cout << "Erro ao abrir o arquivo de usuários." << endl;
+        geraExcecao("Erro ao abrir o arquivo de usuários.");
     }else{
 
         while (arquivo.read((char*)&usuario, sizeof(Usuario))) {
@@ -212,7 +213,7 @@ Usuario manipuladorDeUsuario::procuraUsuarioNome(char nome[]){
     Usuario usuario;
 
     if (!arquivo.is_open()) {
-        cout << "Erro ao abrir o arquivo de usuários." << endl;
+        geraExcecao("Erro ao abrir o arquivo de usuários.");
     }else{
 
         while (arquivo.read((char*)&usuario, sizeof(Usuario))) {
@@ -381,7 +382,7 @@ bool manipuladorDeUsuario::deixarDeSeguir(int idSeguidor, char nomeSeguido[]){
     if(this->procuraUsuarioNome(nomeSeguido).existe()){
         return this->deixarDeSeguir(idSeguidor, this->procuraUsuarioNome(nomeSeguido).getId());
     }else{
-        cout << "O usuário com este nome não existe\n\n";
+        geraExcecao("O usuário com este nome não existe\n\n");
     }
 
     return false;

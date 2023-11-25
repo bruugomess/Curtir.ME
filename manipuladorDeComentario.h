@@ -3,6 +3,7 @@
 
 #include "manipuladorDeUsuario.h"
 #include "Comentario.h"
+#include "Arquivo.h"
 
 #define mostrarTodos -1 // Utilizado no metodo exibirComentariosPorId()
 
@@ -31,7 +32,7 @@ void manipuladorDeComentario::criaArquivosNescessarios(){
     if (!ifs2) { //Verifica se Existe o Arquivo
         ofstream arquivo("Arquivos/comentarios.bin", ios::binary | ios::app);
         if (!arquivo.is_open()) {
-            cout << "Erro ao criar o arquivo de comentários." << endl;
+            geraExcecao("Erro ao criar o arquivo de comentários.");
 
             return;
         }

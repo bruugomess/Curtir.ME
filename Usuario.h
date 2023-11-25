@@ -14,8 +14,8 @@ public:
     void setNome(char nome[]);
     void setSenha(char senha[]);
     void setId(int novoId);
-    void limpaUsuario();
-    bool existe();
+    void limpaUsuario(); // Limpa todas as informações do usuario
+    bool existe(); // Retorna se o objeto usuario está vazio ou não
 
     Usuario();
 
