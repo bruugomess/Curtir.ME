@@ -1,7 +1,7 @@
 #ifndef POSTAGEM_H
 #define POSTAGEM_H
 
-#define tamanhoTextoPostagens 201
+#define tamanhoTextoPostagens 401
 
 #include "Hashtag.h"
 

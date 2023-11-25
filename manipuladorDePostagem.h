@@ -11,6 +11,8 @@ class manipuladorDePostagem
     public:
         void criaArquivosNescessarios();
         void mostrarFeed();
+        void mostrarFeedDosSeguidos(int idUsuarioAtual);
+        void mostrarFeedPorHashtag(char hashtag[]);
         bool adicionaAoArquivo(Postagem post);
         bool aumentarNumeroDePostagens();
         bool ehMinhaPostagem(int idUsuario, int numeroPostagem);
@@ -25,7 +27,7 @@ class manipuladorDePostagem
 
 //Função que cria todos os documentos nescessarios para o funcionamento das postagens
 void manipuladorDePostagem::criaArquivosNescessarios(){
-    //Arquivo de numero de postagens cadastrados
+    //Arquivo de numero de postagens cadastradas
     ifstream ifs("Arquivos/numeroDePostagensCadastradas.bin");
     if (!ifs) { //Verifica se Existe o Arquivo
         ofstream arquivo("Arquivos/numeroDePostagensCadastradas.bin", ios::binary | ios::app);
@@ -53,6 +55,46 @@ void manipuladorDePostagem::criaArquivosNescessarios(){
     }
 }
 
+void manipuladorDePostagem::mostrarFeedDosSeguidos(int idUsuarioAtual){
+    int numeroDePrints = 0;
+    manipuladorDeUsuario mUsuario;
+    manipuladorDeComentario mComentario;
+
+    ifstream arquivo("Arquivos/postagens.bin", ios::binary);
+    Postagem post;
+    if (!arquivo.is_open()) {
+        geraExcecao("Erro ao abrir o arquivo de postagens.");
+    }else{
+
+        while (arquivo.read((char*)&post, sizeof(Postagem))) {
+            if(mUsuario.segue(idUsuarioAtual, post.GetIDusuario())){
+
+                cout << "\n       Id da postagem: " << post.GetnumeroPostagem();
+                cout << "  ||  Postado por: "<< mUsuario.procuraUsuarioId(post.GetIDusuario()).getNome() << endl;
+                cout << "       " << post.Getconteudo()<< endl;
+                cout << "       " << post.Getcurtidas() << "    ";
+
+                if(post.Getcurtidas() == 1){
+                    cout <<"Curtida"<< endl;
+                }else{
+                    cout <<"Curtidas"<< endl;
+
+                }
+                cout << "\n         ...............................................................................................................\n";
+
+                cout << "\n\n           Comentários: " << endl;
+                mComentario.exibirComentariosPorId(post.GetnumeroPostagem(), 2);
+
+                cout << "\n         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n\n";
+                numeroDePrints++;
+            }
+        }
+        if(numeroDePrints == 0){
+            cout << "\n\n           Sem postagens para exibir :( , tente seguir mais usuários para ver postagens!\n\n";
+        }
+    }
+
+}
 
 void manipuladorDePostagem::mostrarFeed(){
 
@@ -88,6 +130,47 @@ void manipuladorDePostagem::mostrarFeed(){
 
             cout << "\n         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n\n";
 
+        }
+    }
+
+}
+
+void manipuladorDePostagem::mostrarFeedPorHashtag(char hashtag[]){
+
+    manipuladorDeUsuario mUsuario;
+    manipuladorDeComentario mComentario;
+
+    ifstream arquivo("Arquivos/postagens.bin", ios::binary);
+    Postagem post;
+    if (!arquivo.is_open()) {
+        geraExcecao("Erro ao abrir o arquivo de postagens.");
+    }else{
+
+        while (arquivo.read((char*)&post, sizeof(Postagem))) {
+            if(post.hashtag.Getexiste() && strcmp(post.hashtag.Gethashtag(),hashtag) == 0){
+
+                cout << "\n       Id da postagem: " << post.GetnumeroPostagem();
+                cout << "  ||  Postado por: "<< mUsuario.procuraUsuarioId(post.GetIDusuario()).getNome() << endl;
+
+                post.hashtag.Getexiste() ? cout << "       " << post.hashtag.Gethashtag() << endl : cout << "";
+
+                cout << "       Conteúdo: " << post.Getconteudo()<< endl;
+                cout << "       " << post.Getcurtidas() << "    ";
+
+                if(post.Getcurtidas() == 1){
+                    cout <<"Curtida"<< endl;
+                }else{
+                    cout <<"Curtidas"<< endl;
+
+                }
+                cout << "\n         ...............................................................................................................\n";
+
+                cout << "\n\n           Comentários: " << endl;
+                mComentario.exibirComentariosPorId(post.GetnumeroPostagem(), 2);
+
+                cout << "\n         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n\n";
+
+            }
         }
     }
 

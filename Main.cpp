@@ -426,14 +426,16 @@ void printaMenuFeed(){
 
             cout <<"    1 - Meu Feed\n";
             cout <<"    2 - Feed Global\n";
-            cout <<"    3 - Postagens por Hashtag\n";
+            cout <<"    3 - Mostrar postagens por Hashtag\n";
             cout <<"    0 - Voltar\n";
             cout <<"    Digite a opção: ";
             cin >> opcao;
+            limpaEntrada();
 
             switch(opcao){
                 case 1: //Mostra feed pelas pessoas que você segue
-
+                    manipuladorPostagens.mostrarFeedDosSeguidos(usuarioAtual.getId());
+                    printaMenuFeedPostagens();
                     break;
                 case 2: // Mostra o Feed total
                     manipuladorPostagens.mostrarFeed();
@@ -441,8 +443,10 @@ void printaMenuFeed(){
                     break;
                 case 3: // Mostra feed por hashtag
                     char hashtag[tamanhoHashtag];
-
-
+                    cout << "Digite a hashtag procurada:";
+                    fgets(hashtag, tamanhoHashtag, stdin);
+                    manipuladorPostagens.mostrarFeedPorHashtag(hashtag);
+                    printaMenuFeedPostagens();
                     break;
                 case 0:
                     return;
