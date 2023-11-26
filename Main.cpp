@@ -4,14 +4,22 @@
 #include <locale>
 #include <stdio.h>
 
+#include "Usuario.cpp"
 #include "Usuario.h"
+#include "Postagem.cpp"
 #include "Postagem.h"
+#include "Comentario.cpp"
 #include "Comentario.h"
+#include "Hashtag.cpp"
 #include "Hashtag.h"
 
+#include "manipuladorDeUsuario.cpp"
 #include "manipuladorDeUsuario.h"
+#include "manipuladorDePostagem.cpp"
 #include "manipuladorDePostagem.h"
+#include "manipuladorDeComentario.cpp"
 #include "manipuladorDeComentario.h"
+
 #define sucesso 0
 /*Criação dos manipuladores utilizados*/
 
