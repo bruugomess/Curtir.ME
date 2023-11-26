@@ -20,6 +20,7 @@ class manipuladorDePostagem
         bool adicionaAoArquivo(Postagem post);
         bool aumentarNumeroDePostagens();
         bool ehMinhaPostagem(int idUsuario, int numeroPostagem);
+        bool apagarPostagem(int numeroPostagem);
         int numeroDePostagens();
         bool salvaPostagem(Postagem post);
         Postagem buscaPostagem(int numeroPostagem);
@@ -84,7 +85,7 @@ void manipuladorDePostagem::mostrarFeedDosSeguidos(int idUsuarioAtual){
     }else{
 
         while (arquivo.read((char*)&post, sizeof(Postagem))) {
-            if(mUsuario.segue(idUsuarioAtual, post.GetIDusuario())){
+            if(mUsuario.segue(idUsuarioAtual, post.GetIDusuario()) && !post.Getapagada()){ //Se o usuario segue ao postador e se a postagem não foi apagada
 
                 cout << "\n       Id da postagem: " << post.GetnumeroPostagem();
                 cout << "  ||  Postado por: "<< mUsuario.procuraUsuarioId(post.GetIDusuario()).getNome() << endl;
@@ -129,28 +130,29 @@ void manipuladorDePostagem::mostrarFeed(){
     }else{
 
         while (arquivo.read((char*)&post, sizeof(Postagem))) {
+            if(!post.Getapagada()){ //Se a postagem não está apagada
+                cout << "\n       Id da postagem: " << post.GetnumeroPostagem();
+                cout << "  ||  Postado por: "<< mUsuario.procuraUsuarioId(post.GetIDusuario()).getNome() << endl;
 
-            cout << "\n       Id da postagem: " << post.GetnumeroPostagem();
-            cout << "  ||  Postado por: "<< mUsuario.procuraUsuarioId(post.GetIDusuario()).getNome() << endl;
+                post.hashtag.Getexiste() ? cout << "       " << post.hashtag.Gethashtag() << endl : cout << "";
 
-            post.hashtag.Getexiste() ? cout << "       " << post.hashtag.Gethashtag() << endl : cout << "";
+                cout << "       Conteúdo: " << post.Getconteudo()<< endl;
+                cout << "       " << post.Getcurtidas() << "    ";
 
-            cout << "       Conteúdo: " << post.Getconteudo()<< endl;
-            cout << "       " << post.Getcurtidas() << "    ";
+                if(post.Getcurtidas() == 1){
+                    cout <<"Curtida"<< endl;
+                }else{
+                    cout <<"Curtidas"<< endl;
 
-            if(post.Getcurtidas() == 1){
-                cout <<"Curtida"<< endl;
-            }else{
-                cout <<"Curtidas"<< endl;
+                }
+                cout << "\n         ...............................................................................................................\n";
+
+                cout << "\n\n           Comentários: " << endl;
+                mComentario.exibirComentariosPorId(post.GetnumeroPostagem(), 2);
+
+                cout << "\n         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n\n";
 
             }
-            cout << "\n         ...............................................................................................................\n";
-
-            cout << "\n\n           Comentários: " << endl;
-            mComentario.exibirComentariosPorId(post.GetnumeroPostagem(), 2);
-
-            cout << "\n         :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n\n";
-
         }
     }
 
@@ -173,7 +175,7 @@ void manipuladorDePostagem::mostrarFeedPorHashtag(char hashtag[]){
     }else{
 
         while (arquivo.read((char*)&post, sizeof(Postagem))) {
-            if(post.hashtag.Getexiste() && strcmp(post.hashtag.Gethashtag(),hashtag) == 0){
+            if(post.hashtag.Getexiste() && strcmp(post.hashtag.Gethashtag(),hashtag) == 0 && !post.Getapagada()){ //Se têm uma hashtag, se a hashtag recebida e a do post batem e a postagem não esta apagada
 
                 cout << "\n       Id da postagem: " << post.GetnumeroPostagem();
                 cout << "  ||  Postado por: "<< mUsuario.procuraUsuarioId(post.GetIDusuario()).getNome() << endl;
@@ -298,6 +300,22 @@ int manipuladorDePostagem::numeroDePostagens(){
         arquivo.read((char*)&numero, sizeof(int));
     }
     return numero;
+}
+
+/**@brief Método que apaga uma postagem do sistema
+*Este método abre o arquivo busca uma postagem atraves do numero de postagem e a muda para apagada, uma vez apagada não é possivel recuperar porém ela não sai do sistema
+*@param numeroPostagem Int
+*@return booleano true se foi apagada com sucesso e false se não
+*/
+bool manipuladorDePostagem::apagarPostagem(int numeroPostagem){
+    Postagem post = this->buscaPostagem(numeroPostagem);
+    if(post.existe()){
+        post.Setapagada(true);
+        this->salvaPostagem(post);
+        return true;
+    }
+
+    return false;
 }
 
 /**@brief Método que aumenta o numero de postagens no sistema

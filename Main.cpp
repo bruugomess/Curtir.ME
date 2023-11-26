@@ -354,6 +354,40 @@ int main() {
 
                                 }
 
+                        }else if(opcaoPostagens == 3){
+                            while(1){
+                                int numeroPostagem;
+                                cout << "Qual postagem deseja apagar (0 para voltar) : \n";
+                                cin >> numeroPostagem;
+
+                                limpaEntrada();
+
+                                if(numeroPostagem == 0){
+                                    goto postagemStop;
+                                }
+
+                                try{
+                                    if( manipuladorPostagens.ehMinhaPostagem(usuarioAtual.getId(),numeroPostagem)){
+
+                                        if(manipuladorPostagens.apagarPostagem(numeroPostagem)){
+                                            cout << "Apagada com sucesso!" << endl;
+                                        }else{
+                                            cout << "Não foi possivel apagar a postagem\n" << endl;
+                                        }
+
+                                        break;
+                                    }else{
+                                        cout << "Você não têm esta postagem.\n\n";
+
+                                    }
+                                }catch(const char* msg){
+                                    cout << "ERRO: " << msg;
+                                    cout << "Não foi possivel apagar!" << endl;
+                                }
+
+                            }
+                            system("pause");
+                            break;
                         }else if(opcaoPostagens == 0){
                             break;
                         }else{
@@ -417,6 +451,7 @@ void printaMenuPostagens(){
 
         cout <<"    1 - Adicionar uma Postagem\n";
         cout <<"    2 - Mudar postagem\n";
+        cout <<"    2 - Apagar postagem\n";
         cout <<"    0 - Voltar\n";
         cout <<"    Digite a opção: ";
 }
