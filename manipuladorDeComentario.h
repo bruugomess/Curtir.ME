@@ -7,6 +7,10 @@
 
 #define mostrarTodos -1 // Utilizado no metodo exibirComentariosPorId()
 
+/**
+*Está Classe é responsável por Manipular todos os documentos nescessários para o funcionamento dos comentários e processos de arquivo relacionados a classe Comentario, sendo adicionar comentário, printaComentario,e etc. Para isto nela são implemantados métodos importantes para a aplicação.
+*/
+
 class manipuladorDeComentario
 {
     public:
@@ -24,7 +28,11 @@ class manipuladorDeComentario
 /*                                          Implementação dos Metodos da Classe manipuladorDeComentario                         */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//Metodo que cria todos os documentos nescessarios para o funcionamento da classe
+
+/**
+*@brief Método que cria todos os documentos nescessarios para o funcionamento da classe manipuladorDeComentario
+*Está função têm como objetivo abrir o arquivo binários (comentarios.bin) importante para a aplicação.
+*/
 void manipuladorDeComentario::criaArquivosNescessarios(){
 
     //Arquivos de comentarios
@@ -41,7 +49,11 @@ void manipuladorDeComentario::criaArquivosNescessarios(){
     }
 }
 
-//Metodo que adiciona um comentário a um arquivo binário
+/**@brief Método que adiciona um comentário no arquivo binário comentarios.bin
+*Este método recebe um comentário, abre o arquivo de comentarios e adiciona o comentário recebido na ultima posição do arquivo
+*@param coment recebe um objeto do tipo Comentario
+*@return Valor booleano, retorna true caso tenha sido adicionado com sucesso e false se não
+*/
 bool manipuladorDeComentario::adicionaAoArquivo(Comentario coment){
     ofstream arquivo("Arquivos/comentarios.bin", ios::binary | ios::app);
 
@@ -58,6 +70,12 @@ bool manipuladorDeComentario::adicionaAoArquivo(Comentario coment){
     return true;
 }
 
+/**@brief Método que exibe comentários por id de uma postagem
+*Este método recebe um id, abre o arquivo de comentários e percorre verificando se os id's de postagens batem, se sim ele exibe os comentários sem ultrapassar o limite do argumento quantidade,
+*caso a quantidade seja -1 ele mostra todos os comentários
+*@param idPost valor inteiro
+*@param quantidade valor inteiro
+*/
 void manipuladorDeComentario::exibirComentariosPorId(int idPost, int quantidade){
     int i = 0;
     ifstream arquivo("Arquivos/comentarios.bin", ios::binary);
@@ -88,6 +106,11 @@ void manipuladorDeComentario::exibirComentariosPorId(int idPost, int quantidade)
     }
 
 }
+
+/**@brief Método que exibe um comentário
+*Este método recebe um comentário, e exibe ele em um formato especial
+*@param coment recebe um objeto do tipo Comentario
+*/
 void manipuladorDeComentario::printaComentario(Comentario coment){
 
         cout <<   "\n\n             | - ";
