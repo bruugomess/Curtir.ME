@@ -6,6 +6,10 @@
 #include "manipuladorDeUsuario.h"
 #include "manipuladorDeComentario.h"
 
+/**
+*Está Classe é responsável por Manipular todos os documentos nescessários para o funcionamento das postagens e processos de arquivo relacionados a classe Postagem, para isto nela são implemantados métodos importantes para a aplicação.
+*/
+
 class manipuladorDePostagem
 {
     public:
@@ -18,14 +22,22 @@ class manipuladorDePostagem
         bool ehMinhaPostagem(int idUsuario, int numeroPostagem);
         int numeroDePostagens();
         bool salvaPostagem(Postagem post);
-        Postagem buscaPostagem(int id);
+        Postagem buscaPostagem(int numeroPostagem);
         bool adicionaCurtida(Postagem post);
-        void detalhar(int id);
+        void detalhar(int numeroPostagem);
 
     private:
 };
 
-//Função que cria todos os documentos nescessarios para o funcionamento das postagens
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*                                          Implementação dos Métodos da Classe manipuladorDePostagem                           */
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+*@brief Método que cria todos os documentos nescessarios para o funcionamento das postagens
+*Está função têm como objetivo abrir 2 arquivos binários importantes para a aplicação sendo eles o arquivo numeroDePostagensCadastradas.bin (Detém o numero de postagens da aplicação)
+* e o outro sendo postagens.bin (Guarda as postagens da aplicação).
+*/
 void manipuladorDePostagem::criaArquivosNescessarios(){
     //Arquivo de numero de postagens cadastrados
     ifstream ifs("Arquivos/numeroDePostagensCadastradas.bin");
@@ -55,6 +67,11 @@ void manipuladorDePostagem::criaArquivosNescessarios(){
     }
 }
 
+/**@brief Método que exibe no console todas as postagens dos seguidos do usuário
+*Este método abre o arquivo de postagens e analisa se o usuário cujo o id é igual ao recebido segue, se segue a postagem encontrada é exibida no console, ele se relaciona com a classe manipuladorDeUsuario
+* e manipuladorDeComentario.
+*@param idUsuarioAtual recebe o id do usuário cujo o feed de seguidores deve ser baseado
+*/
 void manipuladorDePostagem::mostrarFeedDosSeguidos(int idUsuarioAtual){
     int numeroDePrints = 0;
     manipuladorDeUsuario mUsuario;
@@ -96,6 +113,10 @@ void manipuladorDePostagem::mostrarFeedDosSeguidos(int idUsuarioAtual){
 
 }
 
+/**@brief Método que exibe no console todas as postagens do sistema independente de hashtag ou de seguidores começando da mais antiga até a mais atual
+*Este método abre o arquivo de postagens e percorre exibindo cada postagem no console, ele se relaciona com a classe manipuladorDeUsuario
+* e manipuladorDeComentario. São exibidos 2 comentários por postagem.
+*/
 void manipuladorDePostagem::mostrarFeed(){
 
     manipuladorDeUsuario mUsuario;
@@ -135,6 +156,11 @@ void manipuladorDePostagem::mostrarFeed(){
 
 }
 
+/**@brief Método que exibe no console todas as postagens com a hashtag recebida
+*Este método abre o arquivo de postagens e analisa se a postagem  detém uma hashtag igual a recebida, se sim a postagem encontrada é exibida no console, ele se relaciona com a classe manipuladorDeUsuario
+* e manipuladorDeComentario, são exibidos 2 comentários por postagem.
+*@param hashtag recebe um vetor de caracteres que detém a hashtag procurada
+*/
 void manipuladorDePostagem::mostrarFeedPorHashtag(char hashtag[]){
 
     manipuladorDeUsuario mUsuario;
@@ -176,7 +202,12 @@ void manipuladorDePostagem::mostrarFeedPorHashtag(char hashtag[]){
 
 }
 
-void manipuladorDePostagem::detalhar(int id){
+/**@brief Método que exibe no console uma postagem determinada com todos seus comentários
+*Este método abre o arquivo de postagens e analisa se a postagem  detém o numero de postagem igual a recebida, se sim a postagem encontrada é exibida no console, ele se relaciona com a classe manipuladorDeUsuario
+* e manipuladorDeComentario, neste caso todos os cometários são exibidos.
+*@param numeroDaPostagem recebe um inteiro, que referencia ao numero da postagem procurada
+*/
+void manipuladorDePostagem::detalhar(int numeroPostagem){
 
     manipuladorDeUsuario mUsuario;
     manipuladorDeComentario mComentario;
@@ -188,7 +219,7 @@ void manipuladorDePostagem::detalhar(int id){
     }else{
 
         while (arquivo.read((char*)&post, sizeof(Postagem))) {
-            if(post.GetnumeroPostagem() == id){
+            if(post.GetnumeroPostagem() == numeroPostagem){
                 cout << "\n         ...............................................................................................................\n";
 
                 cout << "\n       Id da postagem: " << post.GetnumeroPostagem();
@@ -208,11 +239,16 @@ void manipuladorDePostagem::detalhar(int id){
                 cout << "\n         ...............................................................................................................\n\n";
             }
 
-
         }
     }
 
 }
+
+/**@brief Método que adiciona uma postagem no arquivo binário de postagens
+*Este método recebe uma postagem, abre o arquivo de postagens e adiciona a postagem  recebida na ultima posição do arquivo
+*@param post recebe um objeto do tipo Postagem
+*@return valor booleano, retorna true caso tenha sido adicionado com sucesso e false se não
+*/
 bool manipuladorDePostagem::adicionaAoArquivo(Postagem post){
     ofstream arquivo("Arquivos/postagens.bin", ios::binary | ios::app);
 
@@ -232,6 +268,12 @@ bool manipuladorDePostagem::adicionaAoArquivo(Postagem post){
     return true;
 }
 
+/**@brief Método que verifica se uma postagem com o id recebido como argumento é de quem têm o id recebido como argumento
+*Este método recebe um id de usuário e um numero de postagem, abre o arquivo de postagens e procura a postagem recebida, se a postagem recebida for do id de usuário recebido returna true senão false
+*@param idUsuario recebe um int que referencia a um id de usuario
+*@param numeroPostagem recebe um int que referencia a um numero de postagem
+*@return Um valor booleano, se postagem for do id recebido true, caso contrário falso
+*/
 bool manipuladorDePostagem::ehMinhaPostagem(int idUsuario, int numeroPostagem){
     Postagem post = this->buscaPostagem(numeroPostagem);
 
@@ -242,7 +284,10 @@ bool manipuladorDePostagem::ehMinhaPostagem(int idUsuario, int numeroPostagem){
     }
 }
 
-
+/**@brief Método que retorna o numero de postagens
+*Este método abre o arquivo numeroDePostagensCadastradas.bin faz a leitura e retorna o numero de postagens no sistema
+*@return Valor Int com o numero de postagens
+*/
 int manipuladorDePostagem::numeroDePostagens(){
     ifstream arquivo("Arquivos/numeroDePostagensCadastradas.bin", ios::binary);
     int numero;
@@ -255,7 +300,11 @@ int manipuladorDePostagem::numeroDePostagens(){
     return numero;
 }
 
-
+/**@brief Método que aumenta o numero de postagens no sistema
+*Este método abre o arquivo numeroDePostagensCadastradas.bin faz a leitura soma mais um e substitui no arquivo
+*@see numeroDePostagens()
+*@return valor booleano, true se foi adicionado com sucesso e false se não foi
+*/
 bool manipuladorDePostagem::aumentarNumeroDePostagens(){
     int numero = this->numeroDePostagens();
 
@@ -275,6 +324,12 @@ bool manipuladorDePostagem::aumentarNumeroDePostagens(){
     return true;
 }
 
+/**@brief Método que salva uma postagem com alterações no arquivo
+*Este método têm como objetivo salvar uma postagem já existente, mas que foi alterada no funcionamento da aplicação, ela recebe um objeto do tipo postagem
+*Porcura um objeto com o mesmo numero de postagem e substitui ele no arquivo.
+*@param post do tipo Postagem
+*@return valor booleano, true se foi substituido com sucesso e false se não foi
+*/
 bool manipuladorDePostagem::salvaPostagem(Postagem post){
     fstream arquivo("Arquivos/postagens.bin", ios::binary | std::ios::in | std::ios::out);
     Postagem postAux;
@@ -299,13 +354,23 @@ bool manipuladorDePostagem::salvaPostagem(Postagem post){
     return true;
 }
 
+/**@brief Método que aumenta uma curtida em uma postagem recebida
+*Este método recebe uma postagem e adiciona uma curtida nela e depois a salva com as modificações no arquivo
+*@param post do tipo Postagem
+*@return valor booleano, true se foi adicionado com sucesso e false se não foi
+*/
 bool manipuladorDePostagem::adicionaCurtida(Postagem post){
     post.Setcurtidas(post.Getcurtidas()+1);
     this->salvaPostagem(post);
     return true;
 }
 
-Postagem manipuladorDePostagem::buscaPostagem(int id){
+/**@brief Método que recebe um numero de postagem e retorna a postagem contida no arquivo
+*Este método recebe um numero de postagem, percorre o arquivo de postagem procurando alguma postagem que tenha o numero de postagem recebido como argumento se encontrado retorna a postagem
+*@param id int numero de postagem
+*@return valor booleano, true se foi adicionado com sucesso e false se não foi
+*/
+Postagem manipuladorDePostagem::buscaPostagem(int numeroPostagem){
     ifstream arquivo("Arquivos/postagens.bin", ios::binary | std::ios::in);
     Postagem post;
     Postagem vazio;
@@ -316,7 +381,7 @@ Postagem manipuladorDePostagem::buscaPostagem(int id){
     }else{
 
         while (arquivo.read((char*)&post, sizeof(Postagem))) {
-            if (post.GetnumeroPostagem() == id) {
+            if (post.GetnumeroPostagem() == numeroPostagem) {
                 arquivo.close();
                 return post;
             }
