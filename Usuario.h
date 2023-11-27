@@ -21,6 +21,7 @@ public:
     bool existe(); // Retorna se o objeto usuario está vazio ou não
 
     Usuario();
+    Usuario(char nome[], char senha[], int id);
 
     int numeroSeguidores = 0;
     int numeroSeguindo = 0;
