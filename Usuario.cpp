@@ -60,16 +60,6 @@ void Usuario::setId(int novoId){
 }
 
 /**
-*@brief Contrutor vazio do objeto
-*Este construtor inicia o objeto totalmente zerado
-*/
-Usuario::Usuario(){
-    strcpy(this->nome, "");
-    strcpy(this->senha, "");
-    this->setId(0);
-}
-
-/**
 *@brief Este método verifica se o objeto Usuario esta vazio
 *Este método verifica se o nome e senha estão vazios se sim retorna false se não true
 *@return true se existe e false se não
@@ -90,4 +80,28 @@ void Usuario::limpaUsuario()
     strcpy(this->senha, "");
     this->numeroSeguidores = 0;
     this->numeroSeguindo = 0;
+}
+
+
+/**
+*@brief Contrutor vazio do objeto
+*Este construtor inicia o objeto totalmente zerado
+*/
+Usuario::Usuario(){
+    strcpy(this->nome, "");
+    strcpy(this->senha, "");
+    this->setId(0);
+}
+
+/**
+*@brief Contrutor do objeto com parametros
+*Este construtor inicia o objeto recebendo os parametros principais
+*@param nome Vetor de caracteres
+*@param senha Vetor de caracteres
+*@param id Inteiro
+*/
+Usuario::Usuario(char nome[], char senha[], int id){
+    strcpy(this->nome, nome);
+    strcpy(this->senha, senha);
+    this->setId(id);
 }
