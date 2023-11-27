@@ -21,6 +21,7 @@
 #include "manipuladorDeComentario.h"
 
 #define sucesso 0
+
 /*Criação dos manipuladores utilizados*/
 
 manipuladorDeUsuario manipuladorUsuarios;
@@ -38,6 +39,7 @@ void limpaEntrada(); // Limpa os buffers depois de uma leitura
 void printaMenuPostagens(); // Mostra o menu de Postagens, após o usuario escolher a parte de postagens
 void printaMenuFeed(); // Exibe o menu com opções de feed
 void printaMenuFeedPostagens(); // Mostra o menu de intereção com o feed, que é exibido após serem mostradas postagens
+void Curtir_ME(); // Responsável por todas interações com o usuário
 
 /*Declaração das Funções*/
 
@@ -59,9 +61,15 @@ int main() {
         return 0;
     }
 
-    /*Cria os arquivos nescessários no inicio se não existir*/
+    Curtir_ME();
 
-    try{ // Mostra quantidade de usuarios
+    return sucesso;
+}
+
+
+void Curtir_ME(){
+
+    try{ // Mostra quantidade de usuarios e postagens
         cout << "Numero de usuarios: " << manipuladorUsuarios.numeroDeUsuarios() << endl;
         cout << "Numero de postagens: " << manipuladorPostagens.numeroDePostagens() << endl;
     }catch(const char* msg){
@@ -126,7 +134,7 @@ int main() {
                 system("pause");
                 break;
             case 0:
-                return sucesso;
+                return;
             }
         }else{ //Se existe um usuario
             printaMenu();
@@ -407,11 +415,7 @@ int main() {
         }
     } while (1);
 
-    return 0;
 }
-
-
-
 
 void printaMenuLogin(){
         system("cls");
