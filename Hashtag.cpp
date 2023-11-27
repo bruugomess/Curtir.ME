@@ -120,4 +120,15 @@ bool Hashtag::Getexiste(){
 Hashtag::Hashtag()
 {
 }
+
+/**
+*@brief Contrutor do objeto
+*Este construtor inicia o objeto já setando o valor da hashtag
+*@param hashtag vetor de caracteres
+*/
+Hashtag::Hashtag(char hashtag[])
+{
+    this->Sethashtag(hashtag);
+    this->Setexiste(true);
+}
 /*Métodos para manipulação da hashtag*/

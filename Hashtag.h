@@ -15,6 +15,7 @@ class Hashtag
 {
     public:
         Hashtag();
+        Hashtag(char hashtag[]);
         bool criaArquivosNescessarios();
         bool adicionaHashtagArquivo(Hashtag hashtag);
         bool verificaExistencia(Hashtag hashtag);
