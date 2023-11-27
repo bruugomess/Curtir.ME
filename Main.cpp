@@ -463,7 +463,7 @@ void printaMenuPostagens(){
 
         cout <<"    1 - Adicionar uma Postagem\n";
         cout <<"    2 - Mudar postagem\n";
-        cout <<"    2 - Apagar postagem\n";
+        cout <<"    3 - Apagar postagem\n";
         cout <<"    0 - Voltar\n";
         cout <<"    Digite a opção: ";
 }

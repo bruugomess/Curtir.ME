@@ -3,7 +3,7 @@
 
 #define tamanhoHashtag 51
 
-#include "Arquivo.h"
+#include "manipuladorDeArquivo.h"
 #include <fstream>
 #include <iostream>
 
@@ -11,7 +11,7 @@
 *Esta classe é responsável por guardar informações de uma Hashtag da aplicação, e também pelos métodos de alterações destas (getters e setters)o
 */
 
-class Hashtag
+class Hashtag : public manipuladorDeArquivo
 {
     public:
         Hashtag();

@@ -2,7 +2,7 @@
 #define MANIPULADORDEPOSTAGEM_H
 
 #include "Postagem.h"
-#include "Arquivo.h"
+#include "manipuladorDeArquivo.h"
 #include "manipuladorDeUsuario.h"
 #include "manipuladorDeComentario.h"
 
@@ -10,7 +10,7 @@
 *Está Classe é responsável por Manipular todos os documentos nescessários para o funcionamento das postagens e processos de arquivo relacionados a classe Postagem, para isto nela são implemantados métodos importantes para a aplicação.
 */
 
-class manipuladorDePostagem
+class manipuladorDePostagem : public manipuladorDeArquivo
 {
     public:
         void criaArquivosNescessarios();
