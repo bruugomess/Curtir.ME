@@ -1,7 +1,7 @@
 #ifndef MANIPULADORDEUSUARIO_H
 #define MANIPULADORDEUSUARIO_H
 
-#include "Arquivo.h"
+#include "manipuladorDeArquivo.h"
 #include "Usuario.h"
 #include <string>     // std::string, std::to_string
 #include <iostream>
@@ -15,7 +15,7 @@
 using namespace std;
 Usuario usuarioAtual;
 
-class manipuladorDeUsuario {
+class manipuladorDeUsuario : public manipuladorDeArquivo{
 public:
     Usuario procuraUsuarioId(int id);
     Usuario procuraUsuarioNome(char nome[]);

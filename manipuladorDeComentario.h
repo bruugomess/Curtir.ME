@@ -3,7 +3,7 @@
 
 #include "manipuladorDeUsuario.h"
 #include "Comentario.h"
-#include "Arquivo.h"
+#include "manipuladorDeArquivo.h"
 
 #define mostrarTodos -1 // Utilizado no metodo exibirComentariosPorId()
 
@@ -11,7 +11,7 @@
 *Está Classe é responsável por Manipular todos os documentos nescessários para o funcionamento dos comentários e processos de arquivo relacionados a classe Comentario, sendo adicionar comentário, printaComentario,e etc. Para isto nela são implemantados métodos importantes para a aplicação.
 */
 
-class manipuladorDeComentario
+class manipuladorDeComentario : public manipuladorDeArquivo
 {
     public:
         manipuladorDeComentario();
