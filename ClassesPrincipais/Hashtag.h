@@ -3,7 +3,7 @@
 
 #define tamanhoHashtag 51
 
-#include "manipuladorDeArquivo.h"
+#include "../Manipuladores/manipuladorDeArquivo.h"
 #include <fstream>
 #include <iostream>
 
