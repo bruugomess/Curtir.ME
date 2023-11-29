@@ -3,7 +3,6 @@
 
 #include "manipuladorDeUsuario.h"
 #include "../ClassesPrincipais/Comentario.h"
-#include "manipuladorDeArquivo.h"
 
 #define mostrarTodos -1 // Utilizado no metodo exibirComentariosPorId()
 

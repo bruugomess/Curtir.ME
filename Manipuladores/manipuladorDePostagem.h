@@ -2,7 +2,6 @@
 #define MANIPULADORDEPOSTAGEM_H
 
 #include "../ClassesPrincipais/Postagem.h"
-#include "manipuladorDeArquivo.h"
 #include "manipuladorDeUsuario.h"
 #include "manipuladorDeComentario.h"
 

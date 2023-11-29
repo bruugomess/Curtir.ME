@@ -1,6 +1,7 @@
 #ifndef MANIPULADORDEUSUARIO_H
 #define MANIPULADORDEUSUARIO_H
 
+#include "manipuladorDeArquivo.cpp"
 #include "manipuladorDeArquivo.h"
 #include "../ClassesPrincipais/Usuario.h"
 #include <string>     // std::string, std::to_string
