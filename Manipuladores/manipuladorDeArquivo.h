@@ -10,12 +10,13 @@ using namespace std;
 
 class manipuladorDeArquivo{
     public:
-    bool limparArquivoBinario(char nome[]);
-    void geraExcecao(char problema[]);
-    bool copiarArquivo(char destino[], char origem[]);
+    bool limparArquivoBinario(string nome);
+    void geraExcecao(string problema);
+    bool copiarArquivo(string destino, string origem);
 
     private:
 };
+
 
 
 #endif // MANIPULADORDEARQUIVO_H
