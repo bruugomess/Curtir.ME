@@ -16,6 +16,6 @@ class manipuladorDeArquivo{
 
     private:
 };
-
+#include "manipuladorDeArquivo.cpp"
 
 #endif // MANIPULADORDEARQUIVO_H
