@@ -19,6 +19,7 @@ void manipuladorDeUsuario::criaArquivosNescessarios(){
             geraExcecao("Erro ao criar o arquivo de numero de usuários.");
             return;
         }
+
         int numeroInicial = 0;
         arquivo.write((char*)&numeroInicial, sizeof(int));
         cout << "Arquivo de usuario criado\n";
@@ -340,7 +341,6 @@ bool manipuladorDeUsuario::retiraDeArquivoDeInteiros(char nomeArquivo[], int int
             while (arquivo.read((char*)&valorAtual, sizeof(int))) {
 
                 if (inteiro == valorAtual) {
-                    cout << "Encontrado!" << endl;
                     encontrado = true;
                     break;
                 }

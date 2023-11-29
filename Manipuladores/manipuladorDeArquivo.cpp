@@ -3,7 +3,7 @@
 /**
 *@brief Metódo que gera uma exceção com um texto recebido
 */
-void manipuladorDeArquivo::geraExcecao(char problema[]){
+void manipuladorDeArquivo::geraExcecao(string problema){
     throw problema;
     //cout << problema << endl;
 }
@@ -14,7 +14,7 @@ void manipuladorDeArquivo::geraExcecao(char problema[]){
 *@see geraExcecao(char problema[])
 *@return true caso tenha sido limpo com sucesso e false se não foi limpo
 */
-bool manipuladorDeArquivo::limparArquivoBinario(char nome[]){
+bool manipuladorDeArquivo::limparArquivoBinario(string nome){
         ofstream arquivo(nome,std::ofstream::out | std::ofstream::trunc);
         if (!arquivo.is_open()) {
             geraExcecao("Erro ao limpar o arquivo!");
@@ -31,7 +31,7 @@ bool manipuladorDeArquivo::limparArquivoBinario(char nome[]){
 *@see geraExcecao(char problema[])
 *@return true caso tenha sido copiado com sucesso e false se não foi
 */
-bool manipuladorDeArquivo::copiarArquivo(char destino[], char origem[]){
+bool manipuladorDeArquivo::copiarArquivo(string destino, string origem){
     limparArquivoBinario(destino);
     ifstream arquivoOrigem(origem, ios::binary);
     ofstream arquivoDestino(destino, ios::binary | ios::app);
