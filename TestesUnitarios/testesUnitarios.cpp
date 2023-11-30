@@ -1,4 +1,8 @@
 #include <string.h>
+#include <iostream>
+#include <cstring>
+#include <dirent.h>
+#include <sys/stat.h>
 
 //Classes principais
 #include "../ClassesPrincipais/Usuario.cpp"
@@ -27,16 +31,101 @@
 #include "ClassesTestes/testes_comentario.h"
 #include "ClassesTestes/testes_hashtag.cpp"
 #include "ClassesTestes/testes_hashtag.h"
+#include "ClassesTestes/testes_ManipuladorDeUsuario.cpp"
+#include "ClassesTestes/testes_ManipuladorDeUsuario.h"
 
 #include "doctest/parts/doctest.cpp"
 #include "doctest/doctest.h"
 #include <cassert>
 
+#define falha 1
+#define sucesso 0
+
+//Objetos para testes das classes principais
 testes_postagem testesPostagens;
 testes_usuario testeUsuario;
 testes_comentario testeComentario;
 testes_hashtag testeHashtag;
 
+//Objetos para testes das classes manipuladoras
+testes_ManipuladorDeUsuario testeManipuladorUsuario;
+
+manipuladorDeArquivo manipulador;
+
+void limparPastaSeguidores() {
+    // Obtem o caminho do diretório anterior ao executável
+    char caminho[PATH_MAX];
+    if (getcwd(caminho, sizeof(caminho)) == NULL) {
+        throw "Erro ao obter o diretório atual";
+        return;
+    }
+
+    // Concatena o caminhp da pasta "Seguidores" ao caminho
+    strcat(caminho, "/Arquivos/Seguidores");
+
+    // Abre o diretório
+    DIR* dir = opendir(caminho);
+    if (dir == NULL) {
+        throw "Erro ao abrir o diretório Seguidores";
+        return;
+    }
+
+    // Le os arquivos no diretório e exclue
+    struct dirent* ent;
+    while ((ent = readdir(dir)) != NULL) {
+        if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0) {
+            // Concatena o nome do arquivo ao caminho
+            char arquivo[PATH_MAX];
+            strcpy(arquivo, caminho);
+            strcat(arquivo, "/");
+            strcat(arquivo, ent->d_name);
+
+            // Exclue o arquivo
+            if (remove(arquivo) != 0) {
+                throw "Erro ao excluir o arquivo";
+            }
+        }
+    }
+
+    // Fecha o diretório
+    closedir(dir);
+
+    cout << "Pasta Seguidores limpa com sucesso." << endl;
+}
+
+
+
+/*Está função limpa ou zera todos os arquivos, para que os testes dos manipuladores possam ser feitos sem problemas*/
+bool limpa_todos_arquivos(){
+    manipulador.limparArquivoBinario("Arquivos/comentarios.bin");
+    manipulador.limparArquivoBinario("Arquivos/hashtags.bin");
+    manipulador.zeraArquivo("Arquivos/numeroDePostagensCadastradas.bin");
+    manipulador.zeraArquivo("Arquivos/numeroDeUsuariosCadastrados.bin");
+    manipulador.limparArquivoBinario("Arquivos/postagens.bin");
+    manipulador.limparArquivoBinario("Arquivos/usuarios.bin");
+
+    try{
+        limparPastaSeguidores();
+    }catch(const char* msg){
+        cout << "ERRO: " << msg;
+        return false;
+    }
+
+    return true;
+}
+
+
+int main(int argc, char* argv[]){
+    doctest::Context context;
+    limpa_todos_arquivos(); //Limpa arquivos
+
+    context.run(); // Roda testes
+
+    limpa_todos_arquivos(); //Limpa arquivos
+    return sucesso;
+}
+
+//Testes
 TEST_CASE("Testes da classe Usuario"){
     testeUsuario.executaTestes();
 }
@@ -53,10 +142,7 @@ TEST_CASE("Testes da classe Comentario"){
     testeComentario.executaTestes();
 }
 
-int main(){
-    doctest::Context context;
-    return context.run();
+TEST_CASE("Testes da classe manipuladorDeUsuario"){
+    testeManipuladorUsuario.executaTestes();
 }
-
-
 

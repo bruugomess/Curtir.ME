@@ -13,6 +13,7 @@ class manipuladorDeArquivo{
     bool limparArquivoBinario(string nome);
     void geraExcecao(string problema);
     bool copiarArquivo(string destino, string origem);
+    bool zeraArquivo(string nome);
 
     private:
 };
