@@ -1,5 +1,5 @@
 #include "Comentario.h"
-
+#include <cstring>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*                                          Implementação dos Metodos da Classe Comentário                                      */
@@ -53,16 +53,16 @@ char* Comentario::Getconteudo(){
 *@brief Altera o valor de conteúdo do objeto do tipo Comentario
 *@param conteudo vetor de caracteres
 */
-void Comentario::Setconteudo(char conteudo[]){
-    strcpy(this->conteudo, conteudo);
+void Comentario::Setconteudo(string conteudo){
+    strcpy(this->conteudo, conteudo.c_str());
 }
 
 /**
 *@brief Altera o valor do nomeUsuario do objeto do tipo Comentario
 *@param nomeUsuario vetor de caracteres
 */
-void Comentario::SetnomeUsuario(char nomeUsuario[]){
-    strcpy(this->nomeUsuario, nomeUsuario);
+void Comentario::SetnomeUsuario(string nomeUsuario){
+    strcpy(this->nomeUsuario, nomeUsuario.c_str());
 }
 
 /**
