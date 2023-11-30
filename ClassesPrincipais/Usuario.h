@@ -2,6 +2,8 @@
 #define USUARIO_H
 
 #include <string.h>
+#include <fstream>
+using namespace std;
 
 #define tamanhoNome 50 //Tamanho da string que guarda os nomes de usuário
 #define tamanhoSenha 50
@@ -14,14 +16,14 @@ public:
     int getId() const;
     char* getSenha() const;
     char* getNome() const;
-    void setNome(char nome[]);
-    void setSenha(char senha[]);
+    void setNome(string nome);
+    void setSenha(string senha);
     void setId(int novoId);
     void limpaUsuario(); // Limpa todas as informações do usuario
     bool existe(); // Retorna se o objeto usuario está vazio ou não
 
     Usuario();
-    Usuario(char nome[], char senha[], int id);
+    Usuario(string nome, string senha, int id);
 
     int numeroSeguidores = 0;
     int numeroSeguindo = 0;

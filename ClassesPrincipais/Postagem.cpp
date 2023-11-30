@@ -1,5 +1,5 @@
 #include "Postagem.h"
-
+#include <cstring>
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*                                          Implementação dos Metodos da Classe Postagem                                        */
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,8 +81,8 @@ char* Postagem::Getconteudo(){
 /**
 *@brief Altera o valor DO conteudo do objeto
 */
-void Postagem::Setconteudo(char conteudo[]){
-    strcpy(this->conteudo, conteudo);
+void Postagem::Setconteudo(string conteudo){
+    strcpy(this->conteudo, conteudo.c_str());
 }
 
 /**
