@@ -6,7 +6,7 @@ class testes_manipuladorDeUsuario: public Base_Teste
 {
     public:
         void executaTestes();
-        testes_ManipuladorDeUsuario(){};
+        testes_manipuladorDeUsuario(){};
     protected:
 
     private:
