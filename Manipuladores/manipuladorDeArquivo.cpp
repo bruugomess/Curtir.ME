@@ -35,10 +35,12 @@ bool manipuladorDeArquivo::copiarArquivo(string destino, string origem){
     limparArquivoBinario(destino);
     ifstream arquivoOrigem(origem, ios::binary);
     ofstream arquivoDestino(destino, ios::binary | ios::app);
+
     if (!arquivoDestino.is_open() || !arquivoOrigem.is_open()) {
         geraExcecao("Não foi possível abrir os arquivos.");
         return false;
     }
+
     char c;
     while (arquivoOrigem.read((char*)&c, sizeof(char))) {
             arquivoDestino.write((char*)&c, sizeof(char));
@@ -48,4 +50,34 @@ bool manipuladorDeArquivo::copiarArquivo(string destino, string origem){
     arquivoOrigem.close();
     return true;
 
+}
+/**
+*@brief Metódo que zera um arquivo binário
+*Esta Metódo recebe um nome de arquivo, nisto ela limpar o arquivo, depois adiciona o valor zero no arquivo
+*@see limparArquivoBinario(char nome[])
+*@see geraExcecao(char problema[])
+*@return true caso tenha sido zerado com sucesso e false se não foi
+*/
+bool manipuladorDeArquivo::zeraArquivo(string nome){
+    limparArquivoBinario(nome);
+    // Abrir o arquivo binário em modo de leitura e escrita
+    fstream arquivo(nome, std::ios::binary | std::ios::in | std::ios::out);
+
+    if (!arquivo.is_open()) {
+        geraExcecao("Erro ao abrir o arquivo.");
+        return false;
+    }
+
+    // Posicionar no final do arquivo
+    arquivo.seekg(0, std::ios::end);
+
+    // Adicionar zero ao final do arquivo
+    arquivo.put(0);
+    arquivo.put(0);
+
+    // Fechar o arquivo
+    arquivo.close();
+
+    std::cout << "Zero adicionado com sucesso." << std::endl;
+    return true;
 }
