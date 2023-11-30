@@ -69,16 +69,23 @@ int main() {
 
 void Curtir_ME(){
 
+    system("cls");
+        cout <<"       .....................................................................\n";
+        cout <<"      .                                                                   .\n";
+        cout <<"     .                      Bem vindo ao Curtir.ME!   :)                 .\n";
+        cout <<"    .                                                                   .\n";
+        cout <<"   .....................................................................\n";
     try{ // Mostra quantidade de usuarios e postagens
 
-        cout << "  Numero de usuarios: " << manipuladorUsuarios.numeroDeUsuarios() << endl;
-        cout << " Numero de postagens: " << manipuladorPostagens.numeroDePostagens() << endl;
+        cout << "\n    Numero de usuarios: " << manipuladorUsuarios.numeroDeUsuarios() << endl;
+        cout << "    Numero de postagens: " << manipuladorPostagens.numeroDePostagens() << endl;
+
 
     }catch(const char* msg){
             cout << "ERRO: " << msg;
     }
-
     system("pause");
+    system("cls");
 
     int opcao;
 
@@ -101,16 +108,16 @@ void Curtir_ME(){
                 try{
                     if(manipuladorUsuarios.procuraUsuarioNome(nome).existe() == true){
                         cout << "\n\nEste nome de usuário já existe no sistema, tente outro nome!\n\n\n\n";
-                        system("pause");
                     }else{
                             manipuladorUsuarios.cadastrarUsuario(nome,senha);
-
                     }
                 }catch(const char* msg){
                         cout << "ERRO: " << msg;
                         cout << "Não foi possivel cadastrar o usuário!" << endl;
                 }
+
                 system("pause");
+
                 break;
 
             case 2: //Entrar com usuario e senha
@@ -435,10 +442,10 @@ void printaMenuLogin(){
 
 void printaMenu(){
         system("cls");
-        cout <<"    .....................................................................\n";
-        cout <<"    .                                                                   .\n";
-        cout <<"    .                             Menu                                  .\n";
-        cout <<"    .                                                                   .\n";
+        cout <<"        .....................................................................\n";
+        cout <<"       .                                                                   .\n";
+        cout <<"      .                             Menu                                  .\n";
+        cout <<"     .                                                                   .\n";
         cout <<"    .....................................................................\n";
 
 
