@@ -16,7 +16,7 @@ class Postagem
         int GetIDusuario();
         void SetIDusuario(int val);
         char* Getconteudo();
-        void Setconteudo(char conteudo[]);
+        void Setconteudo(string conteudo);
         int GetnumeroPostagem();
         void SetnumeroPostagem(int val);
         int Getcurtidas();

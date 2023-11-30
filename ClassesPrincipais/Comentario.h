@@ -4,6 +4,10 @@
 #define tamanhoTextoComentarios 201
 #define tamanhoNome 50
 
+
+#include <string.h>
+#include <fstream>
+using namespace std;
 /**
 *Esta classe é responsável por guardar informações de um comentário da aplicação, e também pelos métodos de alterações destas (getters e setters), ela é manipulada pelo manipuladorDeComentario
 */
@@ -16,8 +20,8 @@ class Comentario
         int GetnumeroComentario();
         void SetnumeroComentario(int val);
         char* Getconteudo();
-        void Setconteudo(char conteudo[]);
-        void SetnomeUsuario(char nomeUsuario[]);
+        void Setconteudo(string conteudo);
+        void SetnomeUsuario(string nomeUsuario);
         char* GetnomeUsuario();
         int GetIDpostagem();
         void SetIDpostagem(int val);

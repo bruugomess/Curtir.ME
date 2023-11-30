@@ -1,5 +1,5 @@
 #include "Usuario.h"
-
+#include <cstring>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*                                          Implementação dos Metodos da Classe Usuario                                         */
@@ -39,16 +39,16 @@ char* Usuario::getNome() const {
 *@brief Altera o nome de usuário do objeto
 *@param nome Vetor de caracteres
 */
-void Usuario::setNome(char nome[]) {
-    strcpy(this->nome, nome);
+void Usuario::setNome(string nome) {
+    strcpy(this->nome, nome.c_str());
 }
 
 /**
 *@brief Altera a senha de usuário do objeto
 *@param senha Vetor de caracteres
 */
-void Usuario::setSenha(char senha[]) {
-    strcpy(this->senha, senha);
+void Usuario::setSenha(string senha) {
+    strcpy(this->senha, senha.c_str());
 }
 
 /**
@@ -100,8 +100,8 @@ Usuario::Usuario(){
 *@param senha Vetor de caracteres
 *@param id Inteiro
 */
-Usuario::Usuario(char nome[], char senha[], int id){
-    strcpy(this->nome, nome);
-    strcpy(this->senha, senha);
+Usuario::Usuario(string nome, string senha, int id){
+    strcpy(this->nome, nome.c_str());
+    strcpy(this->senha, senha.c_str());
     this->setId(id);
 }
