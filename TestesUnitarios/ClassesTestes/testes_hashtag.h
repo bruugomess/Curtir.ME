@@ -2,10 +2,10 @@
 #define TESTES_HASHTAG_H
 
 
-class testes_hashtag
+class testes_hashtag : public Base_Teste
 {
     public:
-        testes_hashtag();
+        testes_hashtag(){};
         void executaTeste();
     protected:
 

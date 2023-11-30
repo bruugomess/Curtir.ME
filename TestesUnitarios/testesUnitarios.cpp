@@ -31,8 +31,12 @@
 #include "ClassesTestes/testes_comentario.h"
 #include "ClassesTestes/testes_hashtag.cpp"
 #include "ClassesTestes/testes_hashtag.h"
-#include "ClassesTestes/testes_ManipuladorDeUsuario.cpp"
-#include "ClassesTestes/testes_ManipuladorDeUsuario.h"
+#include "ClassesTestes/testes_manipuladorDeUsuario.cpp"
+#include "ClassesTestes/testes_manipuladorDeUsuario.h"
+#include "ClassesTestes/testes_manipuladorDeComentario.cpp"
+#include "ClassesTestes/testes_manipuladorDeComentario.h"
+#include "ClassesTestes/testes_manipuladorDePostagem.cpp"
+#include "ClassesTestes/testes_manipuladorDePostagem.h"
 
 #include "doctest/parts/doctest.cpp"
 #include "doctest/doctest.h"
@@ -48,7 +52,9 @@ testes_comentario testeComentario;
 testes_hashtag testeHashtag;
 
 //Objetos para testes das classes manipuladoras
-testes_ManipuladorDeUsuario testeManipuladorUsuario;
+testes_manipuladorDeUsuario testeManipuladorUsuario;
+testes_manipuladorDeComentario testeManipuladorComentario;
+testes_manipuladorDePostagem testeManipuladorPostagem;
 
 manipuladorDeArquivo manipulador;
 
@@ -70,7 +76,7 @@ void limparPastaSeguidores() {
         return;
     }
 
-    // Le os arquivos no diretório e exclue
+    // Le os arquivos no diretório e exclue eles
     struct dirent* ent;
     while ((ent = readdir(dir)) != NULL) {
         if (strcmp(ent->d_name, ".") != 0 && strcmp(ent->d_name, "..") != 0) {
@@ -80,17 +86,15 @@ void limparPastaSeguidores() {
             strcat(arquivo, "/");
             strcat(arquivo, ent->d_name);
 
-            // Exclue o arquivo
-            if (remove(arquivo) != 0) {
+            if (remove(arquivo) != 0) { // Exclue o arquivo
                 throw "Erro ao excluir o arquivo";
             }
         }
     }
 
-    // Fecha o diretório
-    closedir(dir);
+    closedir(dir); // Fecha o diretório
 
-    cout << "Pasta Seguidores limpa com sucesso." << endl;
+
 }
 
 
@@ -146,3 +150,10 @@ TEST_CASE("Testes da classe manipuladorDeUsuario"){
     testeManipuladorUsuario.executaTestes();
 }
 
+TEST_CASE("Testes da classe manipuladorDeComentario"){
+    testeManipuladorComentario.executaTestes();
+}
+
+TEST_CASE("Testes da classe manipuladorDePostagem"){
+    testeManipuladorPostagem.executaTestes();
+}

@@ -2,10 +2,10 @@
 #define TESTES_POSTAGEM_H
 #include <string.h>
 
-class testes_postagem
+class testes_postagem : public Base_Teste
 {
     public:
-        testes_postagem();
+        testes_postagem(){};
         void executaTestes();
     private:
 };
