@@ -40,6 +40,7 @@ void printaMenuPostagens(); // Mostra o menu de Postagens, após o usuario escolh
 void printaMenuFeed(); // Exibe o menu com opções de feed
 void printaMenuFeedPostagens(); // Mostra o menu de intereção com o feed, que é exibido após serem mostradas postagens
 void Curtir_ME(); // Responsável por todas interações com o usuário
+int lerInteiro(); // Responsável por forçar a leitura de um inteiro
 
 /*Declaração das Funções*/
 
@@ -93,7 +94,7 @@ void Curtir_ME(){
         if(!usuarioAtual.existe()){  //Se não existe um usuario
             printaMenuLogin();
 
-            cin >> opcao;
+            opcao = lerInteiro();
             char nome[tamanhoNome], senha[tamanhoSenha];
             switch (opcao) {
             case 1: //Cadastrar Usuario
@@ -147,27 +148,27 @@ void Curtir_ME(){
             }
         }else{ //Se existe um usuario
             printaMenu();
-            cin >> opcao;
+            opcao = lerInteiro();
 
             switch(opcao){
                 case 3:// Seguir ou não seguir outro usuário
 
                         int opcaoSeguir;
                         cout << "   (1)Seguir (2) Deixar de seguir: ";
-                        cin >> opcaoSeguir;
+                        opcaoSeguir = lerInteiro();
                         limpaEntrada();
 
                         if(opcaoSeguir == 1){ //Seguir
 
                             cout << "    (1) Seguir por id (2) Seguir por nome: ";
-                            cin >> opcaoSeguir;
+                            opcaoSeguir = lerInteiro();
                             limpaEntrada();
 
                             try{
                                 if(opcaoSeguir == 1){ //Seguir por Id
                                     int id;
                                     cout << "       Digite o Id que dejesa seguir: ";
-                                    cin >> id;
+                                    id = lerInteiro();
                                     limpaEntrada();
                                     if(id == usuarioAtual.getId()){ //Se for você mesmo
 
@@ -219,13 +220,13 @@ void Curtir_ME(){
 
 
                                 cout << "    (1) Deixar de seguir por id (2) Deixar de seguir por nome: ";
-                                    cin >> opcaoSeguir;
+                                    opcaoSeguir = lerInteiro();
                                     limpaEntrada();
 
                                     if(opcaoSeguir == 1){ //Deixar de seguir por Id
                                         int id;
                                         cout << "       Digite o Id que dejesa deixar de seguir: ";
-                                        cin >> id;
+                                        id = lerInteiro();
                                         limpaEntrada();
                                         try{
 
@@ -296,7 +297,7 @@ void Curtir_ME(){
                     while(1){
                         printaMenuPostagens();
                         int opcaoPostagens;
-                        cin >> opcaoPostagens;
+                        opcaoPostagens = lerInteiro();
                         limpaEntrada();
 
                         if(opcaoPostagens == 1){ //Adicionar Postagens
@@ -307,7 +308,7 @@ void Curtir_ME(){
                                 Postagem novaPostagem(usuarioAtual.getId(), 0,texto);
 
                                 cout << "Dejesa adicionar uma Hashtag (1) Sim (Outro numero) Não: \n";
-                                cin >> opcaoPostagens;
+                                opcaoPostagens = lerInteiro();
                                 limpaEntrada();
 
                                 if(opcaoPostagens == 1){ //Adiciona hashtag
@@ -347,7 +348,7 @@ void Curtir_ME(){
                                 while(1){
                                     int numeroPostagem;
                                     cout << "Qual postagem deseja alterar (0 para voltar) : \n";
-                                    cin >> numeroPostagem;
+                                    numeroPostagem = lerInteiro();
 
                                     limpaEntrada();
 
@@ -383,7 +384,7 @@ void Curtir_ME(){
                             while(1){
                                 int numeroPostagem;
                                 cout << "Qual postagem deseja apagar (0 para voltar) : \n";
-                                cin >> numeroPostagem;
+                                numeroPostagem = lerInteiro();
 
                                 limpaEntrada();
 
@@ -492,12 +493,12 @@ void printaMenuFeedPostagens(){
             cout <<"    3 - Detalhar uma postagem (Mostrar postagem e todos os seus comentários)\n";
             cout <<"    0 - Voltar\n";
             cout <<"    Digite a opção: ";
-            cin >> opcao;
+            opcao = lerInteiro();
 
             switch(opcao){
                 case 1: //Adiciona uma curtida a uma postagem escolhida
                     cout << "   Digite o Id da postagem: ";
-                    cin >> idPostagem;
+                    idPostagem = lerInteiro();
 
                     try{
 
@@ -578,7 +579,7 @@ void printaMenuFeed(){
             cout <<"    3 - Mostrar postagens por Hashtag\n";
             cout <<"    0 - Voltar\n";
             cout <<"    Digite a opção: ";
-            cin >> opcao;
+            opcao = lerInteiro();
             limpaEntrada();
 
             switch(opcao){
@@ -623,6 +624,23 @@ void printaMenuFeed(){
 
             }
         }
+}
+
+
+
+
+int lerInteiro() {
+    int numero;
+    while (true) {
+        if (cin >> numero) {
+            break;
+        } else {
+            cin.clear();
+            limpaEntrada();
+            cout << "      Entrada invalida. Digite um numero inteiro: \n      -";
+        }
+    }
+    return numero;
 }
 
 void limpaEntrada(){
