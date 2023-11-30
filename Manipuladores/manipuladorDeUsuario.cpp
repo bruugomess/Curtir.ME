@@ -270,9 +270,11 @@ bool manipuladorDeUsuario::seguir(int idSeguidor, int idSeguido){
     //Adiciona no arquivo "Segue"
 
     ofstream arquivo(nomeArquivoSeguidor, ios::binary | ios::app);
-
     if (!arquivo.is_open()) {
-        geraExcecao(strcat("Erro ao abrir o arquivo ", nomeArquivoSeguidor));
+        string erro = "";
+        erro.append("Erro ao abrir o arquivo ");
+        erro.append(nomeArquivoSeguidor);
+        geraExcecao(erro);
         return false;
     }
 
@@ -282,7 +284,10 @@ bool manipuladorDeUsuario::seguir(int idSeguidor, int idSeguido){
     //Adiciona no arquivo "Seguidor"
     arquivo.open(nomeArquivoSeguido, ios::binary | ios::app);
     if (!arquivo.is_open()) {
-        geraExcecao(strcat("Erro ao abrir o arquivo ", nomeArquivoSeguido));
+        string erro = "";
+        erro.append("Erro ao abrir o arquivo ");
+        erro.append(nomeArquivoSeguido);
+        geraExcecao(erro);
         return false;
     }
 
@@ -325,12 +330,15 @@ bool manipuladorDeUsuario::retiraDeArquivoDeInteiros(char nomeArquivo[], int int
     int valorAtual;
 
     if (!arquivoAux.is_open()) {
-        geraExcecao(strcat("Erro ao abrir o arquivo ", "aux.bin"));
+
+        geraExcecao("Erro ao abrir o arquivo aux.bin");
         return false;
     }
 
     if (!arquivo.is_open()) {
-        geraExcecao(strcat("Erro ao abrir o arquivo ", nomeArquivo));
+        string erro = "Erro ao abrir o arquivo ";
+        erro.append(nomeArquivo);
+        geraExcecao(erro);
         return false;
     }else{
             while (arquivo.read((char*)&valorAtual, sizeof(int))) {
@@ -343,7 +351,9 @@ bool manipuladorDeUsuario::retiraDeArquivoDeInteiros(char nomeArquivo[], int int
             }
 
             if(!encontrado){
-                geraExcecao(strcat("Inteiro não encontrado no arquivo", nomeArquivo));
+                string erro = "Inteiro não encontrado no arquivo";
+                erro.append(nomeArquivo);
+                geraExcecao(erro);
                 return false;
             }else{
                 copiarArquivo(nomeArquivo, "Arquivos/aux.bin");
@@ -450,7 +460,9 @@ bool manipuladorDeUsuario::segue(int idSeguidor, int idSeguido){
     ifstream arquivo(nomeArquivoSeguidor, ios::binary);
     int id;
     if (!arquivo.is_open()) {
-        geraExcecao(strcat("Erro ao abrir o arquivo ", nomeArquivoSeguidor));
+        string erro = "Erro ao abrir o arquivo ";
+        erro.append(nomeArquivoSeguidor);
+        geraExcecao(erro);
         return false;
     }else{
 
