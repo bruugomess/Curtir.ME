@@ -78,6 +78,5 @@ bool manipuladorDeArquivo::zeraArquivo(string nome){
     // Fechar o arquivo
     arquivo.close();
 
-    std::cout << "Zero adicionado com sucesso." << std::endl;
     return true;
 }

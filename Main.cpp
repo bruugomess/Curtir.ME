@@ -70,8 +70,10 @@ int main() {
 void Curtir_ME(){
 
     try{ // Mostra quantidade de usuarios e postagens
-        cout << "Numero de usuarios: " << manipuladorUsuarios.numeroDeUsuarios() << endl;
-        cout << "Numero de postagens: " << manipuladorPostagens.numeroDePostagens() << endl;
+
+        cout << "  Numero de usuarios: " << manipuladorUsuarios.numeroDeUsuarios() << endl;
+        cout << " Numero de postagens: " << manipuladorPostagens.numeroDePostagens() << endl;
+
     }catch(const char* msg){
             cout << "ERRO: " << msg;
     }
