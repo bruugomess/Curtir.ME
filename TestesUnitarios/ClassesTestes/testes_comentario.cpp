@@ -1,10 +1,5 @@
 #include "testes_comentario.h"
 
-testes_comentario::testes_comentario()
-{
-    //ctor
-}
-
 void testes_comentario::executaTestes(){
     Comentario coment(2,"usuarioTeste", 1, 1,"comentarioTeste");
     CHECK(coment.existe() == true);

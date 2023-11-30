@@ -78,8 +78,6 @@ void manipuladorDeUsuario::cadastrarUsuario(char nome[], char senha[]) {
             geraExcecao("Erro ao criar o arquivo de numero de seguidores.");
             return;
         }
-
-        cout << "Arquivo de seguidores criado.\n";
         arquivo.close();
     }
 
@@ -94,9 +92,6 @@ void manipuladorDeUsuario::cadastrarUsuario(char nome[], char senha[]) {
             geraExcecao("Erro ao criar o arquivo de numero de seguidos.");
             return;
         }
-
-        system("pause");
-
         cout << "Arquivo de seguidores criado.\n";
         arquivo.close();
     }

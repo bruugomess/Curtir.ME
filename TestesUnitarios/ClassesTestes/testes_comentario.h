@@ -2,10 +2,10 @@
 #define TESTES_COMENTARIO_H
 
 
-class testes_comentario
+class testes_comentario : public Base_Teste
 {
     public:
-        testes_comentario();
+        testes_comentario(){};
         void executaTestes();
     protected:
 

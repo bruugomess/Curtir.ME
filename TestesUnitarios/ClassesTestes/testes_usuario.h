@@ -7,6 +7,7 @@
 class testes_usuario : public Base_Teste
 {
     public:
+        testes_usuario(){};
         void executaTestes();
     private:
 };
