@@ -1,5 +1,0 @@
-Natália: Implementação da Classe Usuarios, da parte de Login e tratamento de exceções
-Bruna: Implementação da classe manipulador de usuarios, e implementação dos testes unitários e parte de seguidores
-Fernando: Implementação da classe Hashtags e suas partes contidas no código
-Bernardo: Implementação da classe postagem e da classe manipuladorDePostagens, Comentários do Doxygen
-Pedro: Criação da classe comentário e manipuladorDeComentários
