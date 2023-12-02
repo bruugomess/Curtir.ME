@@ -6,7 +6,9 @@ O Curtir.ME não é apenas mais uma rede social, é uma revolução na forma com
 
 ### Principais Recursos
 Curtidas Ilimitadas: Expresse-se sem limites! Curta quantas postagens quiser, sem se preocupar com restrições arbitrárias.
+
 Experiência Social Aprimorada: Crie conexões mais significativas com amigos, familiares e seguidores através de uma experiência de curtida autêntica.
+
 Desenvolvido em C++: Nosso projeto é feito com a linguagem de programação C++, garantindo eficiência e desempenho excepcionais.
 
 ### Dependencias
